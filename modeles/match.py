@@ -18,6 +18,8 @@ class Match:
         self.liste_1 = []
         self.liste_2 = []
         self.resultat_match = ()
+        self.joueur_1.adversaires.append(self.joueur_2)
+        self.joueur_2.adversaires.append(self.joueur_1)
 
     def __str__(self):
         return f"----Match: {self.joueur_1.nom_famille} VS " \
@@ -37,7 +39,9 @@ class Match:
         :type resultat_joueur_2: float
         """
         self.resultat_joueur_1 = resultat_joueur_1
+        self.joueur_1.total_points_tournoi += resultat_joueur_1
         self.resultat_joueur_2 = resultat_joueur_2
+        self.joueur_2.total_points_tournoi += resultat_joueur_2
         self.liste_1 = [self.joueur_1, self.resultat_joueur_1]
         self.liste_2 = [self.joueur_2, self.resultat_joueur_2]
         self.resultat_match = (self.liste_1, self.liste_2)

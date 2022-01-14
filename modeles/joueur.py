@@ -23,12 +23,15 @@ class Joueur:
         self.date_naissance = date_naissance
         self.sexe = sexe
         self.classement = classement
+        self.total_points_tournoi = 0
+        self.adversaires = []
 
     def __str__(self):
         return f"----Joueur: {self.nom_famille} {self.prenom}----,\n" \
                f"date de naissance: {self.date_naissance},\n" \
                f"sexe: {self.sexe},\n" \
-               f"classement: {self.classement}"
+               f"classement: {self.classement},\n" \
+               f"total points: {self.total_points_tournoi}"
 
     def __repr__(self):
         return str(self)

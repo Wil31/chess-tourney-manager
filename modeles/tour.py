@@ -48,16 +48,39 @@ class Tour:
         return liste_joueurs_tri
 
     def generer_paires_initial(self):
+        """
+        Méthode pour générer les paires des premiers matchs
+        """
         liste_joueurs_tri = self.trier_joueurs_classement()
         nombre_joueurs = len(liste_joueurs_tri)
-        liste_joueurs_sup = liste_joueurs_tri[0:int(nombre_joueurs/2)]
-        liste_joueurs_inf = liste_joueurs_tri[int(nombre_joueurs/2):]
+        liste_joueurs_sup = liste_joueurs_tri[:int(nombre_joueurs / 2)]
+        liste_joueurs_inf = liste_joueurs_tri[int(nombre_joueurs / 2):]
         for joueur_1, joueur_2 in zip(liste_joueurs_sup, liste_joueurs_inf):
             match = Match(joueur_1, joueur_2)
             self.liste_matchs.append(match)
 
     def trier_joueurs_points(self):
-        pass
+        """
+        Méthode pour trier les joueurs par points (par classement si égalité)
+        """
+        liste_joueurs_tmp = self.trier_joueurs_classement()
+        liste_joueurs_tri = sorted(liste_joueurs_tmp, key=lambda
+            joueur: joueur.total_points_tournoi, reverse=True)
+        return liste_joueurs_tri
 
     def generer_paires(self):
-        pass
+        """
+        Méthode pour générer les paires des matchs suivants
+        """
+        liste_joueurs_tri = self.trier_joueurs_points()
+        liste_joueurs_1 = liste_joueurs_tri[::2]
+        liste_joueurs_2 = liste_joueurs_tri[1::2]
+        for joueur_1, joueur_2 in zip(liste_joueurs_1, liste_joueurs_2):
+            if joueur_1 not in joueur_2.adversaires:
+                match = Match(joueur_1, joueur_2)
+                self.liste_matchs.append(match)
+            else:
+                print(">>>>>>>>>>>>>!!!!!!!!!!!!!!!!!!!!<<<<<<<<<<<<<<<")
+                print(f"{joueur_1.nom_famille} a deja jouer vs "
+                      f"{joueur_2.nom_famille}")
+                print()
