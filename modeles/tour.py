@@ -1,4 +1,5 @@
 from modeles.match import Match
+from collections import deque
 
 
 class Tour:
@@ -49,7 +50,7 @@ class Tour:
 
     def generer_paires_initial(self):
         """
-        Méthode pour générer les paires des premiers matchs
+        Méthode pour générer les paires du premier tour
         """
         liste_joueurs_tri = self.trier_joueurs_classement()
         nombre_joueurs = len(liste_joueurs_tri)
@@ -58,6 +59,7 @@ class Tour:
         for joueur_1, joueur_2 in zip(liste_joueurs_sup, liste_joueurs_inf):
             match = Match(joueur_1, joueur_2)
             self.liste_matchs.append(match)
+            self.tournoi.matchs_joues.append(match)
 
     def trier_joueurs_points(self):
         """
@@ -70,17 +72,34 @@ class Tour:
 
     def generer_paires(self):
         """
-        Méthode pour générer les paires des matchs suivants
+        Méthode pour générer les paires des tours suivants
         """
-        liste_joueurs_tri = self.trier_joueurs_points()
-        liste_joueurs_1 = liste_joueurs_tri[::2]
-        liste_joueurs_2 = liste_joueurs_tri[1::2]
-        for joueur_1, joueur_2 in zip(liste_joueurs_1, liste_joueurs_2):
-            if joueur_1 not in joueur_2.adversaires:
-                match = Match(joueur_1, joueur_2)
-                self.liste_matchs.append(match)
-            else:
+        queue = deque(self.trier_joueurs_points())
+        while len(queue) > 0:
+            joueur_1 = queue.popleft()
+            joueur_2 = queue.popleft()
+            match = Match(joueur_1, joueur_2)
+            self.liste_matchs.append(match)
+            self.tournoi.matchs_joues.append(match)
+
+        """
+        while len(liste_joueurs_tri) > 0:
+            longueur_list = len(liste_joueurs_tri)
+            joueur_1 = liste_joueurs_tri[-longueur_list]
+            index_joueur_2 = 1 - longueur_list
+            joueur_2 = liste_joueurs_tri[index_joueur_2]
+            if joueur_2 in joueur_1.adversaires:
                 print(">>>>>>>>>>>>>!!!!!!!!!!!!!!!!!!!!<<<<<<<<<<<<<<<")
-                print(f"{joueur_1.nom_famille} a deja jouer vs "
+                print(f"{joueur_1.nom_famille} a deja joué vs "
                       f"{joueur_2.nom_famille}")
                 print()
+                new_index_joueur_2 = index_joueur_2 + 1
+                if new_index_joueur_2 > 0:
+                    new_index_joueur_2 = new_index_joueur_2 - 1
+                    joueur_2 = liste_joueurs_tri[new_index_joueur_2]
+                    break
+                joueur_2 = liste_joueurs_tri[new_index_joueur_2]
+            # joueur_2 = liste_joueurs_tri.pop(new_index_joueur_2)
+            match = Match(joueur_1, joueur_2)
+            self.liste_matchs.append(match)
+        """
