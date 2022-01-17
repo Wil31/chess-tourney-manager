@@ -4,7 +4,7 @@ class Tournoi:
     """
 
     def __init__(self, nom, lieu, date, controle_temps, description,
-                 nombre_tours=4):
+                 nombre_tours=4, joueurs=None):
         """
         Initialise une instance de Tournoi.
         :param nom: nom du tournoi
@@ -26,18 +26,21 @@ class Tournoi:
         self.controle_temps = controle_temps
         self.descritpion = description
         self.nombre_tours = nombre_tours
-        self.joueurs = []
+        self.joueurs = joueurs
         self.tournees = []
+        self.matchs_joues = []
 
     def __str__(self):
-        return f"----Tournoi: {self.nom}----,\n" \
+        return f"========================================\n" \
+               f"----Tournoi: {self.nom}----,\n" \
                f"lieu: {self.lieu},\n" \
                f"date: {self.date},\n" \
                f"contrôle du temps: {self.controle_temps},\n" \
                f"description: {self.descritpion},\n" \
                f"nombre de tours: {self.nombre_tours},\n" \
                f"nombre de joueurs: {len(self.joueurs)},\n" \
-               f"tour en cours: {len(self.tournees)}"
+               f"tour en cours: {len(self.tournees)},\n" \
+               f"========================================\n"
 
     def __repr__(self):
         return str(self)
