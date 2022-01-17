@@ -1,13 +1,17 @@
 from modeles.tournoi import Tournoi
-from modeles.joueur import Joueur
 from tests.tests import Tests
 from tests.tests import cree_joueurs_alea
+from controleurs import menu_controleur
+
+
+class LancerTournoiControleur:
+    def __init__(self):
+        pass
 
 
 class CreerTournoiControleur:
     def __init__(self):
-        # self.tournoi = Tournoi()
-        # self.joueur = Joueur()
+        self.menu_principal_controleur = menu_controleur.MenuPrincipalControleur()
         self.infos_tournoi = []
 
     def __call__(self, *args, **kwargs):
@@ -18,6 +22,11 @@ class CreerTournoiControleur:
         self.infos_tournoi.append(self.ajout_description())
         self.infos_tournoi.append(self.ajout_nombre_tours())
         self.infos_tournoi.append(self.ajout_joueurs())
+        self.menu_principal_controleur()
+        print("==========================================================\n"
+              "==================Nouveau tournoi créé !==================\n"
+              "==========================================================\n"
+              "")
 
     def ajout_nom(self):
         nom_valide = False
@@ -78,15 +87,15 @@ class CreerTournoiControleur:
 
         nombre_valide = False
         while not nombre_valide:
-            print("Y pour changer, N pour garder 4 tours")
+            print("Y pour changer / N pour garder 4 tours")
             choix = input("==> ")
-            if choix == ('Y' or 'y'):
+            if choix == 'Y' or 'y':
                 nombre_tours = input("Entrer un nombre de tours: ")
                 if nombre_tours.isdigit() and int(nombre_tours) > 0:
                     nombre_valide = True
                 else:
                     print("Entrez un nombre entier supérieur à 0!")
-            if choix == ('N' or 'n'):
+            if choix == 'N' or 'n':
                 nombre_valide = True
         return nombre_tours
 
@@ -124,6 +133,9 @@ class CreerTournoiControleur:
 
 
 class TournoiTest:
+    def __init__(self):
+        self.menu_principal_controleur = menu_controleur.MenuPrincipalControleur()
+
     def __call__(self):
         # Créer le tournoi test
         tournoi_rois = Tournoi("Tournoi des Rois", "Toulouse", "16 janvier",
@@ -131,3 +143,4 @@ class TournoiTest:
 
         tournoi_test = Tests(tournoi_rois)
         tournoi_test.run()
+        self.menu_principal_controleur()

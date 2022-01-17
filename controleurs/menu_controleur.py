@@ -1,10 +1,11 @@
 import sys
 
 from vues import vue_principale
-from controleurs.tournoi_controleur import TournoiTest, CreerTournoiControleur
+from controleurs.tournoi_controleur import TournoiTest, \
+    CreerTournoiControleur, LancerTournoiControleur
 
 
-class MenuManager:
+class MenuPrincipalControleur:
     def __init__(self):
         self.vues = vue_principale.MenuPrincipal()
         self.choix = None
@@ -16,6 +17,9 @@ class MenuManager:
         if entry == '1':
             self.choix = CreerTournoiControleur()
             self.aller_vers_creer_tournoi()
+        if entry == '2':
+            self.choix = LancerTournoiControleur()
+            self.aller_vers_lancer_tournoi()
         if entry == 'x':
             self.choix = FermerApplication()
             self.aller_vers_fermer_application()
@@ -24,6 +28,9 @@ class MenuManager:
             self.aller_vers_tournoi_test()
 
     def aller_vers_creer_tournoi(self):
+        return self.choix()
+
+    def aller_vers_lancer_tournoi(self):
         return self.choix()
 
     def aller_vers_fermer_application(self):
@@ -37,7 +44,9 @@ class MenuManager:
             entry = input("==>")
             if entry == '1':
                 return '1'
-            if entry == 'x':
+            if entry == '2':
+                return '2'
+            if entry == 'X' or 'x':
                 return 'x'
             if entry == '9':
                 return '9'
