@@ -1,14 +1,9 @@
-from tests.tests import Tests
-from modeles.tournoi import Tournoi
+from controleurs import menu_controleur
 
 
 def main():
-    # Créer le tournoi
-    tournoi_rois = Tournoi("Tournoi des Rois", "Toulouse", "16 janvier",
-                           "Bullet", "Le premier tournoi de 2022")
-
-    tournoi_test = Tests(tournoi_rois)
-    tournoi_test.run()
+    controller = menu_controleur.MenuManager()
+    controller()
 
 
 if __name__ == "__main__":
