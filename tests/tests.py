@@ -30,7 +30,7 @@ def cree_joueurs_alea(nombre):
     for i in range(nombre):
         liste_joueurs.append(Joueur(names.get_last_name(),
                                     names.get_first_name(),
-                                    random.randint(1300, 2700)))
+                                    random.randint(1300, 2900)))
     return liste_joueurs
 
 

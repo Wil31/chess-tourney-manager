@@ -47,8 +47,3 @@ class Joueur:
         :type nouveau_classement: int
         """
         self.classement = nouveau_classement
-
-    def ajout_data_joueur(self, infos_joueur):
-        joueur = Joueur(infos_joueur[0], infos_joueur[1], infos_joueur[2],
-                        infos_joueur[3], infos_joueur[4])
-        self.data_joueurs.data_joueurs.append(joueur)

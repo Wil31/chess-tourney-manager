@@ -3,18 +3,32 @@ import sys
 from vues import vue_principale
 from controleurs import tournoi_controleur
 from controleurs import joueur_controleur
-from modeles import data_tournois
-from modeles import data_joueurs
+
+
+def choix_menu():
+    while True:
+        entree = input("==>")
+        if entree == '1':
+            return '1'
+        if entree == '2':
+            return '2'
+        if entree == 'X' or 'x':
+            return 'x'
+        if entree == '9':
+            return '9'
+        else:
+            print("Entrée non valide")
+
 
 class MenuPrincipalControleur:
     def __init__(self):
         self.vues = vue_principale.MenuPrincipal()
         self.controleur_actuel = None
-        self.data_joueurs = data_joueurs.DataJoueurs()
+        self.data_joueurs = []
 
     def __call__(self):
         self.vues.afficher_menu()
-        entree = self.choix_menu()
+        entree = choix_menu()
 
         if entree == '1':
             self.controleur_actuel = MenuTournoiControleur()
@@ -40,20 +54,6 @@ class MenuPrincipalControleur:
 
     def aller_vers_tournoi_test(self):
         return self.controleur_actuel()
-
-    def choix_menu(self):
-        while True:
-            entree = input("==>")
-            if entree == '1':
-                return '1'
-            if entree == '2':
-                return '2'
-            if entree == 'X' or 'x':
-                return 'x'
-            if entree == '9':
-                return '9'
-            else:
-                print("Entrée non valide")
 
 
 class MenuTournoiControleur(MenuPrincipalControleur):
@@ -88,7 +88,6 @@ class MenuJoueurControleur(MenuPrincipalControleur):
                 self.controleur_actuel = self.creer_joueur()
             if entree == '2':
                 print(self.data_joueurs)
-                print(self.data_joueurs.data_liste_joueurs)
             if entree == 'x' or 'X':
                 self.controleur_actuel = self.menu_principal_controleur()
             else:

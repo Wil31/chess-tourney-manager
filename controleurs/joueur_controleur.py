@@ -1,5 +1,5 @@
 from controleurs import menu_controleur
-from modeles import joueur
+from modeles.joueur import Joueur
 
 
 class CreerJoueurControleur:
@@ -11,20 +11,24 @@ class CreerJoueurControleur:
     def __call__(self, *args, **kwargs):
         print("Creation de joueur...\n"
               "")
-        self.modele_joueur = joueur.Joueur()
         self.infos_joueur.append(self.ajout_nom())
         self.infos_joueur.append(self.ajout_prenom())
         self.infos_joueur.append(self.ajout_classement())
         self.infos_joueur.append(self.ajout_anniversaire())
         self.infos_joueur.append(self.ajout_sexe())
-        # self.modele_joueur.ajout_data_joueur(self.infos_joueur)
-        self.data_joueurs.data_liste_joueurs.append(self.infos_joueur)
+        self.data_joueurs.append(self.creer_obj_joueur(self.infos_joueur))
 
         print("==========================================================\n"
               "===============Nouveau joueur enregistré !================\n"
               "==========================================================\n"
               "")
         print(self.infos_joueur)
+        print(self.data_joueurs)
+
+    def creer_obj_joueur(self, infos_joueur):
+        joueur = Joueur(infos_joueur[0], infos_joueur[1], infos_joueur[2],
+                        infos_joueur[3], infos_joueur[4])
+        return joueur
 
     def ajout_nom(self):
         nom_valide = False
