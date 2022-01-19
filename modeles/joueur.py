@@ -1,10 +1,13 @@
+from modeles.data_joueurs import DataJoueurs
+
+
 class Joueur:
     """
     Représente un joueur d'échecs
     """
 
-    def __init__(self, nom_famille, prenom, classement=0, date_naissance=None,
-                 sexe=None):
+    def __init__(self, nom_famille=None, prenom=None, classement=None,
+                 date_naissance=None, sexe=None):
         """
         Initialise une instance de Joueur.
         :param nom_famille: nom du joueur
@@ -25,6 +28,7 @@ class Joueur:
         self.classement = classement
         self.total_points_tournoi = 0
         self.adversaires = []
+        self.data_joueurs = DataJoueurs()
 
     def __str__(self):
         return f"----Joueur: {self.nom_famille} {self.prenom}----,\n" \
@@ -43,3 +47,8 @@ class Joueur:
         :type nouveau_classement: int
         """
         self.classement = nouveau_classement
+
+    def ajout_data_joueur(self, infos_joueur):
+        joueur = Joueur(infos_joueur[0], infos_joueur[1], infos_joueur[2],
+                        infos_joueur[3], infos_joueur[4])
+        self.data_joueurs.data_joueurs.append(joueur)

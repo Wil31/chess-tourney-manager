@@ -31,7 +31,7 @@ class CreerTournoiControleur:
     def ajout_nom(self):
         nom_valide = False
         while not nom_valide:
-            nom_tournoi = input("Entrer le NOM du Tournoi: ")
+            nom_tournoi = input("Entrez le NOM du Tournoi: ")
             if nom_tournoi != '':
                 nom_valide = True
             else:
@@ -54,7 +54,7 @@ class CreerTournoiControleur:
         jour_valide = False
         while not jour_valide:
             jour = input("Entrer le JOUR du Tournoi: ")
-            if (0 < int(jour) < 32) and jour.isdigit():
+            if jour.isdigit() and (0 < int(jour) < 32):
                 jour_valide = True
                 date.append(jour)
             else:
@@ -63,7 +63,7 @@ class CreerTournoiControleur:
         mois_valide = False
         while not mois_valide:
             mois = input("Entrer le MOIS du Tournoi: ")
-            if 0 < int(mois) < 13 and mois.isdigit():
+            if mois.isdigit() and (0 < int(mois) < 12):
                 mois_valide = True
                 date.append(mois)
             else:
@@ -97,6 +97,8 @@ class CreerTournoiControleur:
                     print("Entrez un nombre entier supérieur à 0!")
             if choix == 'N' or 'n':
                 nombre_valide = True
+            else:
+                print("Veuillez choisir Y/N")
         return nombre_tours
 
     def ajout_controle_temps(self):
@@ -118,7 +120,7 @@ class CreerTournoiControleur:
                 controle_temps = "Coup rapide"
                 choix_valide = True
             else:
-                print("Choix invalide")
+                print("Choix invalide!")
         return controle_temps
 
     def ajout_description(self):
@@ -142,5 +144,6 @@ class TournoiTest:
                                "Bullet", "Le premier tournoi de 2022")
 
         tournoi_test = Tests(tournoi_rois)
+        print("ici!!")
         tournoi_test.run()
         self.menu_principal_controleur()
