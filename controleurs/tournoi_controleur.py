@@ -29,6 +29,7 @@ class CreerTournoiControleur:
               "")
 
     def ajout_nom(self):
+        nom_tournoi = None
         nom_valide = False
         while not nom_valide:
             nom_tournoi = input("Entrez le NOM du Tournoi: ")
@@ -39,6 +40,7 @@ class CreerTournoiControleur:
         return nom_tournoi
 
     def ajout_lieu(self):
+        lieu_tournoi = None
         lieu_valide = False
         while not lieu_valide:
             lieu_tournoi = input("Entrer le LIEU du Tournoi: ")
@@ -84,21 +86,22 @@ class CreerTournoiControleur:
         nombre_tours = 4
         print("4 tours par défaut.\n"
               "Voulez-vous modifier?")
-
-        nombre_valide = False
-        while not nombre_valide:
+        while True:
             print("Y pour changer / N pour garder 4 tours")
             choix = input("==> ")
-            if choix == 'Y' or 'y':
-                nombre_tours = input("Entrer un nombre de tours: ")
-                if nombre_tours.isdigit() and int(nombre_tours) > 0:
-                    nombre_valide = True
-                else:
-                    print("Entrez un nombre entier supérieur à 0!")
-            if choix == 'N' or 'n':
-                nombre_valide = True
+            if choix == 'Y' or choix == 'y':
+                while True:
+                    nombre_tours = input("Entrer un nombre de tours: ")
+                    if nombre_tours.isdigit() and int(nombre_tours) > 0:
+                        break
+                    else:
+                        print("Entrez un nombre entier supérieur à 0!")
+                        continue
+            if choix == 'N' or choix == 'n':
+                break
             else:
                 print("Veuillez choisir Y/N")
+                continue
         return nombre_tours
 
     def ajout_controle_temps(self):
@@ -107,20 +110,20 @@ class CreerTournoiControleur:
               "1) Bullet\n"
               "2) Blitz\n"
               "3) Coup rapide\n")
-        choix_valide = False
-        while not choix_valide:
+        while True:
             choix = input("==> ")
             if choix == '1':
                 controle_temps = "Bullet"
-                choix_valide = True
+                break
             if choix == '2':
                 controle_temps = "Blitz"
-                choix_valide = True
+                break
             if choix == '3':
                 controle_temps = "Coup rapide"
-                choix_valide = True
+                break
             else:
                 print("Choix invalide!")
+                continue
         return controle_temps
 
     def ajout_description(self):

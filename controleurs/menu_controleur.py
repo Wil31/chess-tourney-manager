@@ -12,7 +12,7 @@ def choix_menu():
             return '1'
         if entree == '2':
             return '2'
-        if entree == 'X' or 'x':
+        if entree == 'X' or entree == 'x':
             return 'x'
         if entree == '9':
             return '9'
@@ -68,7 +68,7 @@ class MenuTournoiControleur(MenuPrincipalControleur):
             entree = input("==>")
             if entree == '1':
                 self.controleur_actuel = self.creer_tournoi()
-            if entree == 'x' or 'X':
+            if entree == 'x' or entree == 'X':
                 self.controleur_actuel = self.menu_principal_controleur()
             else:
                 print("Entrée non valide")
@@ -88,7 +88,7 @@ class MenuJoueurControleur(MenuPrincipalControleur):
                 self.controleur_actuel = self.creer_joueur()
             if entree == '2':
                 print(self.data_joueurs)
-            if entree == 'x' or 'X':
+            if entree == 'x' or entree == 'X':
                 self.controleur_actuel = self.menu_principal_controleur()
             else:
                 print("Entrée non valide")

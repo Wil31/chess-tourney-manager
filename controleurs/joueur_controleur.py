@@ -31,6 +31,7 @@ class CreerJoueurControleur:
         return joueur
 
     def ajout_nom(self):
+        nom_joueur = None
         nom_valide = False
         while not nom_valide:
             nom_joueur = input("Entrez le NOM du joueur: ")
@@ -41,6 +42,7 @@ class CreerJoueurControleur:
         return nom_joueur
 
     def ajout_prenom(self):
+        prenom_joueur = None
         prenom_valide = False
         while not prenom_valide:
             prenom_joueur = input("Entrez le PRENOM du joueur: ")
@@ -85,10 +87,10 @@ class CreerJoueurControleur:
     def ajout_sexe(self):
         while True:
             choix = input("Entrez les sexe: F ou M: ")
-            if choix == 'M' or 'm':
+            if choix == 'M' or choix == 'm':
                 sexe = 'M'
                 break
-            if choix == 'F' or 'f':
+            if choix == 'F' or choix == 'f':
                 sexe = 'F'
                 break
             else:
