@@ -3,8 +3,8 @@ class Tournoi:
     Représente un tournoi d'échecs
     """
 
-    def __init__(self, nom, lieu, date, controle_temps, description,
-                 nombre_tours=4, joueurs=None):
+    def __init__(self, nom=None, lieu=None, date=None, controle_temps=None,
+                 description=None, nombre_tours=None, joueurs=None):
         """
         Initialise une instance de Tournoi.
         :param nom: nom du tournoi

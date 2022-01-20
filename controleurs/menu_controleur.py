@@ -24,7 +24,6 @@ class MenuPrincipalControleur:
     def __init__(self):
         self.vues = vue_principale.MenuPrincipal()
         self.controleur_actuel = None
-        self.data_joueurs = []
 
     def __call__(self):
         self.vues.afficher_menu()
@@ -61,6 +60,7 @@ class MenuTournoiControleur(MenuPrincipalControleur):
         super().__init__()
         self.creer_tournoi = tournoi_controleur.CreerTournoiControleur()
         self.menu_principal_controleur = MenuPrincipalControleur()
+        self.lancer_tournoi = tournoi_controleur.LancerTournoiControleur()
 
     def __call__(self, *args, **kwargs):
         self.vues.afficher_menu_gestion_tournoi()
@@ -68,6 +68,8 @@ class MenuTournoiControleur(MenuPrincipalControleur):
             entree = input("==>")
             if entree == '1':
                 self.controleur_actuel = self.creer_tournoi()
+            if entree == '2':
+                self.controleur_actuel = self.lancer_tournoi()
             if entree == 'x' or entree == 'X':
                 self.controleur_actuel = self.menu_principal_controleur()
             else:
@@ -87,7 +89,7 @@ class MenuJoueurControleur(MenuPrincipalControleur):
             if entree == '1':
                 self.controleur_actuel = self.creer_joueur()
             if entree == '2':
-                print(self.data_joueurs)
+                print(joueur_controleur.DATA_JOUEURS)
             if entree == 'x' or entree == 'X':
                 self.controleur_actuel = self.menu_principal_controleur()
             else:

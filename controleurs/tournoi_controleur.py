@@ -1,20 +1,48 @@
 from modeles.tournoi import Tournoi
 from tests.tests import Tests
 from tests.tests import cree_joueurs_alea
-from controleurs import menu_controleur
+from controleurs import menu_controleur, joueur_controleur
+
+DATA_TOURNOI = []
 
 
 class LancerTournoiControleur:
-    def __init__(self):
+    """
+    Lance un tournoi deja créé.
+    """
+
+    def __call__(self, *args, **kwargs):
+        self.liste_joueurs = []
+
+        self.objet_tournoi = self.selection_tournoi()
+
+    def selection_tournoi(self):
+        """
+        Affiche les tournois existants et retourne un tournoi choisi.
+        """
         pass
 
 
+class RapportTournoi:
+    """
+    Affiche la liste des tournois.
+    Affiche les détails d'un tournoi: les tours, les matchs et les joueurs (par
+    ordre alphabétique ou par classement).
+    """
+
+
 class CreerTournoiControleur:
+    """
+    Créé un tournoi
+    """
     def __init__(self):
         self.menu_principal_controleur = menu_controleur.MenuPrincipalControleur()
         self.infos_tournoi = []
+        self.data_tournoi = DATA_TOURNOI
 
     def __call__(self, *args, **kwargs):
+        print("Creation de tournoi...\n"
+              "")
         self.infos_tournoi.append(self.ajout_nom())
         self.infos_tournoi.append(self.ajout_lieu())
         self.infos_tournoi.append(self.ajout_date())
@@ -22,11 +50,18 @@ class CreerTournoiControleur:
         self.infos_tournoi.append(self.ajout_description())
         self.infos_tournoi.append(self.ajout_nombre_tours())
         self.infos_tournoi.append(self.ajout_joueurs())
-        self.menu_principal_controleur()
+        self.data_tournoi.append(self.creer_obj_tournoi(self.infos_tournoi))
         print("==========================================================\n"
-              "==================Nouveau tournoi créé !==================\n"
+              "===============Nouveau tournoi enregistré !===============\n"
               "==========================================================\n"
               "")
+        self.menu_principal_controleur()
+
+    def creer_obj_tournoi(self, infos_tournoi):
+        tournoi = Tournoi(infos_tournoi[0], infos_tournoi[1], infos_tournoi[2],
+                          infos_tournoi[3], infos_tournoi[4], infos_tournoi[5],
+                          infos_tournoi[6])
+        return tournoi
 
     def ajout_nom(self):
         nom_tournoi = None

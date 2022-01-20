@@ -1,12 +1,18 @@
 from controleurs import menu_controleur
 from modeles.joueur import Joueur
 
+DATA_JOUEURS = []
+
 
 class CreerJoueurControleur:
+    """
+    Créé un joueur
+    """
+
     def __init__(self):
         self.menu_principal_controleur = menu_controleur.MenuPrincipalControleur()
         self.infos_joueur = []
-        self.data_joueurs = self.menu_principal_controleur.data_joueurs
+        self.data_joueurs = DATA_JOUEURS
 
     def __call__(self, *args, **kwargs):
         print("Creation de joueur...\n"
@@ -17,13 +23,11 @@ class CreerJoueurControleur:
         self.infos_joueur.append(self.ajout_anniversaire())
         self.infos_joueur.append(self.ajout_sexe())
         self.data_joueurs.append(self.creer_obj_joueur(self.infos_joueur))
-
         print("==========================================================\n"
               "===============Nouveau joueur enregistré !================\n"
               "==========================================================\n"
               "")
-        print(self.infos_joueur)
-        print(self.data_joueurs)
+        self.menu_principal_controleur()
 
     def creer_obj_joueur(self, infos_joueur):
         joueur = Joueur(infos_joueur[0], infos_joueur[1], infos_joueur[2],
@@ -75,7 +79,7 @@ class CreerJoueurControleur:
 
         annee_valide = False
         while not annee_valide:
-            annee = input("Entrez l'ANNEE de naissance: ")
+            annee = input("Entrez l'ANNÉE de naissance: ")
             if annee.isdigit() and len(annee) == 4:
                 annee_valide = True
                 date.append(annee)
