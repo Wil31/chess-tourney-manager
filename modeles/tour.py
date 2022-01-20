@@ -7,7 +7,7 @@ class Tour:
     Représente un tour de tournoi
     """
 
-    def __init__(self, nom, date_debut, heure_debut, tournoi):
+    def __init__(self, tournoi, nom=None, date_debut=None, heure_debut=None):
         """
         Initialise une instance de Tour.
         :param nom: nom du tour

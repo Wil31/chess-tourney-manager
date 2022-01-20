@@ -1,33 +1,37 @@
 from controleurs import menu_controleur
 from modeles.joueur import Joueur
 
-DATA_JOUEURS = []
+
+class RapportJoueurs:
+    """
+    Affiche la liste des joueurs enregistrés.
+    Trie par ordre alphabétique ou par classement.
+    """
 
 
 class CreerJoueurControleur:
     """
-    Créé un joueur
+    Créé un nouveau joueur et l'ajoute à la variable globale DATA_JOUEURS
     """
 
     def __init__(self):
         self.menu_principal_controleur = menu_controleur.MenuPrincipalControleur()
         self.infos_joueur = []
-        self.data_joueurs = DATA_JOUEURS
+        self.objet_joueur = None
 
-    def __call__(self, *args, **kwargs):
-        print("Creation de joueur...\n"
-              "")
+    def __call__(self):
+        print("Creation de joueur...\n")
         self.infos_joueur.append(self.ajout_nom())
         self.infos_joueur.append(self.ajout_prenom())
         self.infos_joueur.append(self.ajout_classement())
         self.infos_joueur.append(self.ajout_anniversaire())
         self.infos_joueur.append(self.ajout_sexe())
-        self.data_joueurs.append(self.creer_obj_joueur(self.infos_joueur))
+        self.objet_joueur = self.creer_obj_joueur(self.infos_joueur)
         print("==========================================================\n"
               "===============Nouveau joueur enregistré !================\n"
               "==========================================================\n"
               "")
-        self.menu_principal_controleur()
+        return self.objet_joueur
 
     def creer_obj_joueur(self, infos_joueur):
         joueur = Joueur(infos_joueur[0], infos_joueur[1], infos_joueur[2],
@@ -71,7 +75,7 @@ class CreerJoueurControleur:
         mois_valide = False
         while not mois_valide:
             mois = input("Entrez le MOIS de naissance: ")
-            if mois.isdigit() and (0 < int(mois) < 12):
+            if mois.isdigit() and (0 < int(mois) < 13):
                 mois_valide = True
                 date.append(mois)
             else:

@@ -17,15 +17,19 @@ class Match:
         self.resultat_joueur_2 = None
         self.liste_1 = []
         self.liste_2 = []
-        self.resultat_match = ()
+        self.resultat_match = None
         self.joueur_1.adversaires.append(self.joueur_2)
         self.joueur_2.adversaires.append(self.joueur_1)
 
     def __str__(self):
-        return f"----Match: {self.joueur_1.nom_famille} VS " \
-               f"{self.joueur_2.nom_famille}----,\n" \
-               f"Résultat J1: {self.resultat_joueur_1},\n" \
-               f"Résultat J2: {self.resultat_joueur_2}"
+        if self.resultat_match is not None:
+            return f"Match: {self.joueur_1.nom_famille} {self.joueur_1.prenom}" \
+                   f" VS {self.joueur_2.nom_famille} {self.joueur_2.prenom},\n" \
+                   f"Résultat J1: {self.resultat_joueur_1},\n" \
+                   f"Résultat J2: {self.resultat_joueur_2}"
+        else:
+            return f"Match: {self.joueur_1.nom_famille} {self.joueur_1.prenom}" \
+                   f" VS {self.joueur_2.nom_famille} {self.joueur_2.prenom}\n"
 
     def __repr__(self):
         return str(self)

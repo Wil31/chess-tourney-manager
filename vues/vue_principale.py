@@ -1,11 +1,18 @@
 class MenuPrincipal:
+    """
+    Classe pour l'affichage des menus principaux
+    """
+
     def afficher_menu(self):
+        """
+        Menu principal
+        """
         print("-------------------------------------------------\n"
               "------- GESTIONNAIRE DE TOURNOI D'ÉCHECS --------\n"
               "-------------------------------------------------\n"
               "-- Choisir une option: --------------------------\n"
-              "1) Menu tournoi ---------------------------------\n"
-              "2) Menu joueur ----------------------------------\n"
+              "1) Nouveau tournoi ------------------------------\n"
+              "2) Reprendre un tournoi -------------------------\n"
               "-------------------------------------------------\n"
               "x) Quitter --------------------------------------\n"
               "-------------------------------------------------\n"
@@ -13,6 +20,9 @@ class MenuPrincipal:
               "")
 
     def afficher_menu_gestion_tournoi(self):
+        """
+        Menu gestion des tournois
+        """
         print("-------------------------------------------------\n"
               "----------------- MENU TOURNOI ------------------\n"
               "-------------------------------------------------\n"
@@ -26,6 +36,9 @@ class MenuPrincipal:
               "")
 
     def afficher_menu_gestion_joueurs(self):
+        """
+        Menu gestion des joueurs
+        """
         print("-------------------------------------------------\n"
               "------------------ MENU JOUEUR ------------------\n"
               "-------------------------------------------------\n"

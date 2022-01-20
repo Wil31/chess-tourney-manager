@@ -30,8 +30,8 @@ class MenuPrincipalControleur:
         entree = choix_menu()
 
         if entree == '1':
-            self.controleur_actuel = MenuTournoiControleur()
-            self.aller_vers_menu_tournoi()
+            self.controleur_actuel = tournoi_controleur.CreerTournoiControleur()
+            self.aller_vers_creer_tournoi()
         if entree == '2':
             self.controleur_actuel = MenuJoueurControleur()
             self.aller_vers_menu_joueurs()
@@ -42,7 +42,7 @@ class MenuPrincipalControleur:
             self.controleur_actuel = tournoi_controleur.TournoiTest()
             self.aller_vers_tournoi_test()
 
-    def aller_vers_menu_tournoi(self):
+    def aller_vers_creer_tournoi(self):
         return self.controleur_actuel()
 
     def aller_vers_menu_joueurs(self):
@@ -69,11 +69,11 @@ class MenuTournoiControleur(MenuPrincipalControleur):
             if entree == '1':
                 self.controleur_actuel = self.creer_tournoi()
             if entree == '2':
+                print(tournoi_controleur.DATA_TOURNOI)
+            if entree == '3':
                 self.controleur_actuel = self.lancer_tournoi()
             if entree == 'x' or entree == 'X':
                 self.controleur_actuel = self.menu_principal_controleur()
-            else:
-                print("Entrée non valide")
 
 
 class MenuJoueurControleur(MenuPrincipalControleur):
@@ -92,8 +92,6 @@ class MenuJoueurControleur(MenuPrincipalControleur):
                 print(joueur_controleur.DATA_JOUEURS)
             if entree == 'x' or entree == 'X':
                 self.controleur_actuel = self.menu_principal_controleur()
-            else:
-                print("Entrée non valide")
 
 
 class FermerApplication:
