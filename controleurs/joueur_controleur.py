@@ -94,10 +94,10 @@ class CreerJoueurControleur:
     def ajout_sexe(self):
         while True:
             choix = input("Entrez les sexe: F ou M: ")
-            if choix == 'M' or choix == 'm':
+            if choix in ('M', 'm'):
                 sexe = 'M'
                 break
-            if choix == 'F' or choix == 'f':
+            if choix in ('F', 'f'):
                 sexe = 'F'
                 break
             else:

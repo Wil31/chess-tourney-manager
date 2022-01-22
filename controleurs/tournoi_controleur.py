@@ -24,7 +24,7 @@ class LancerTournoiControleur:
             entree = input(
                 "Tournoi terminé, voulez-vous afficher le résultat?\n"
                 "Y/N ==> ")
-            if entree == ('Y'|'y'):
+            if entree in ('Y', 'y'):
                 self.rapports.resulats_tournoi()
 
     def premier_tour(self):
@@ -62,7 +62,7 @@ class LancerTournoiControleur:
                     match.ajouter_resultats_match(float(resultat_joueur_1),
                                                   float(resultat_joueur_2))
             else:
-                pass
+                continue
         self.rapports.resultats_tour(premier_tour)
 
     def tours_suivants(self):
@@ -126,12 +126,16 @@ class CreerTournoiControleur:
         self.infos_tournoi.append(self.ajout_description())
         self.infos_tournoi.append(self.ajout_nombre_tours())
         self.infos_tournoi.append(self.ajout_nombre_joueurs())
-        entree = input("Créer des joueurs aléatoires? (Y/N) ==> ")
-        if entree == 'y' or entree == 'Y':
-            self.infos_tournoi.append(self.ajout_joueurs_aleatoires())
-        else:
-            self.ajout_joueurs()
-            self.infos_tournoi.append(self.liste_joueurs)
+        entree_valide = False
+        while not entree_valide:
+            entree = input("Créer des joueurs aléatoires? (Y/N) ==> ")
+            if entree in ('Y', 'y'):
+                entree_valide = True
+                self.infos_tournoi.append(self.ajout_joueurs_aleatoires())
+            if entree in ('N', 'n'):
+                entree_valide = True
+                self.ajout_joueurs()
+                self.infos_tournoi.append(self.liste_joueurs)
         self.objet_tournoi = self.creer_obj_tournoi(self.infos_tournoi)
         print("==========================================================\n"
               "==================Nouveau tournoi créé !==================\n"
@@ -141,11 +145,11 @@ class CreerTournoiControleur:
         choix_valide = False
         while not choix_valide:
             choix = input("Y / N ? ==> ")
-            if choix == 'y' or choix == 'Y':
+            if choix in ('Y', 'y'):
                 lancer_tournoi = LancerTournoiControleur(self.objet_tournoi)
                 lancer_tournoi()
                 choix_valide = True
-            if choix == 'n' or choix == 'N':
+            if choix in ('N', 'n'):
                 # il faudrait enregistrer le tournoi pour plus tard
                 choix_valide = True
 
@@ -221,13 +225,13 @@ class CreerTournoiControleur:
         while not entree_valide:
             print("Y pour changer / N pour garder 4 tours")
             choix = input("==> ")
-            if choix == 'Y' or choix == 'y':
+            if choix in ('Y', 'y'):
                 nombre_tours = input("Entrer un nombre de tours: ")
                 if nombre_tours.isdigit() and int(nombre_tours) > 0:
                     entree_valide = True
                 else:
                     print("Entrez un nombre entier supérieur à 0!")
-            if choix == 'N' or choix == 'n':
+            if choix in ('N', 'n'):
                 entree_valide = True
             if choix == "":
                 print("Veuillez choisir Y/N")
