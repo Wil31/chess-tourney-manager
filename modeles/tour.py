@@ -28,10 +28,14 @@ class Tour:
         self.liste_matchs = []
 
     def __str__(self):
-        return f"----Tour: {self.nom}----,\n" \
-               f"date de début: {self.date_debut},\n" \
-               f"heure de début: {self.heure_debut},\n" \
-               f"nombre de matchs: {len(self.liste_matchs)}"
+        if self.date_debut is not None and self.heure_debut is not None:
+            return f"----Tour: {self.nom}----,\n" \
+                   f"Date de début: {self.date_debut},\n" \
+                   f"Heure de début: {self.heure_debut},\n" \
+                   f"Nombre de matchs: {len(self.liste_matchs)}\n"
+        else:
+            return f"----Tour: {self.nom}----,\n" \
+                   f"Nombre de matchs: {len(self.liste_matchs)}\n"
 
     def __repr__(self):
         return str(self)

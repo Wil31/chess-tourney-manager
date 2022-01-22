@@ -21,6 +21,9 @@ def choix_menu():
 
 
 class MenuPrincipalControleur:
+    """
+    Contrôleur du menu principal
+    """
     def __init__(self):
         self.vues = vue_principale.MenuPrincipal()
         self.controleur_actuel = None

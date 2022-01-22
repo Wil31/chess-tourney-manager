@@ -1,8 +1,9 @@
+from controleurs import menu_controleur, joueur_controleur
 from modeles.tour import Tour
 from modeles.tournoi import Tournoi
 from tests.tests import Tests
 from tests.tests import cree_joueurs_alea
-from controleurs import menu_controleur, joueur_controleur
+from vues import vue_principale
 
 
 class LancerTournoiControleur:
@@ -14,11 +15,27 @@ class LancerTournoiControleur:
         self.tournoi_actuel = tournoi
 
     def __call__(self):
+        self.rapports = vue_principale.Rapports(self.tournoi_actuel)
+        self.premier_tour()
+        if int(self.tournoi_actuel.nombre_tours) > 1:
+            self.tours_suivants()
+
+        while True:
+            entree = input(
+                "Tournoi terminé, voulez-vous afficher le résultat?\n"
+                "Y/N ==> ")
+            if entree == ('Y'|'y'):
+                self.rapports.resulats_tournoi()
+
+    def premier_tour(self):
+        """
+        Contrôle le premier tour du tournoi
+        """
         premier_tour = Tour(self.tournoi_actuel, "Tour N°1")
+        self.tournoi_actuel.tournees.append(premier_tour)
         premier_tour.generer_paires_initial()
 
-        test = Tests(self.tournoi_actuel)
-        test.affichage_tour(premier_tour)
+        self.rapports.preparation_premier_tour(premier_tour)
 
         entree_valide = False
         while not entree_valide:
@@ -29,7 +46,7 @@ class LancerTournoiControleur:
                     resultat_valide = False
                     while not resultat_valide:
                         resultat_joueur_1 = input(
-                            f"Entrez le résultat de {match.joueur_1.nom_famille}"
+                            f"\nEntrez le résultat de {match.joueur_1.nom_famille}"
                             f" {match.joueur_1.prenom}\n"
                             f"1: Victoire | 0: Défaire | N: Match nul ==> ")
                         match resultat_joueur_1:
@@ -46,36 +63,45 @@ class LancerTournoiControleur:
                                                   float(resultat_joueur_2))
             else:
                 pass
-            test.affichage_tour(premier_tour)
+        self.rapports.resultats_tour(premier_tour)
 
-        # for tour in range(int(self.tournoi_actuel.nombre_tours) - 1):
-        #     print(f"tour {tour}")
-        #     ce_tour = Tour(self.tournoi_actuel, f"Tour N°{tour + 1}")
-
-    def ajout_nom(self):
-        nom_joueur = None
-        nom_valide = False
-        while not nom_valide:
-            nom_joueur = input("Entrez le NOM du tour: ")
-            if nom_joueur != '' and nom_joueur.isalpha():
-                nom_valide = True
-            else:
-                print("Un nom est obligatoire!")
-        return nom_joueur
-
-    def selection_tournoi(self):
+    def tours_suivants(self):
         """
-        Affiche les tournois existants et retourne un tournoi choisi.
+        Contrôle les autres tours du tournoi
         """
-        pass
+        for tour in range(int(self.tournoi_actuel.nombre_tours) - 1):
+            ce_tour = Tour(self.tournoi_actuel, f"Tour N°{tour + 2}")
+            ce_tour.generer_paires()
+            self.tournoi_actuel.tournees.append(ce_tour)
+            self.rapports.preparation_tour(ce_tour)
 
-
-class RapportTournoi:
-    """
-    Affiche la liste des tournois.
-    Affiche les détails d'un tournoi: les tours, les matchs et les joueurs (par
-    ordre alphabétique ou par classement).
-    """
+            entree_valide = False
+            while not entree_valide:
+                entree = input("Appuyez sur Y pour entrer les résultats ==> ")
+                if entree == "Y" or entree == 'y':
+                    entree_valide = True
+                    for match in ce_tour.liste_matchs:
+                        resultat_valide = False
+                        while not resultat_valide:
+                            resultat_joueur_1 = input(
+                                f"Entrez le résultat de {match.joueur_1.nom_famille}"
+                                f" {match.joueur_1.prenom}\n"
+                                f"1: Victoire | 0: Défaire | N: Match nul ==> ")
+                            match resultat_joueur_1:
+                                case '0':
+                                    resultat_joueur_2 = 1
+                                    resultat_valide = True
+                                case '1':
+                                    resultat_joueur_2 = 0
+                                    resultat_valide = True
+                                case ('n' | 'N'):
+                                    resultat_joueur_2 = resultat_joueur_1 = 0.5
+                                    resultat_valide = True
+                        match.ajouter_resultats_match(float(resultat_joueur_1),
+                                                      float(resultat_joueur_2))
+                else:
+                    pass
+            self.rapports.resultats_tour(ce_tour)
 
 
 class CreerTournoiControleur:
@@ -86,6 +112,7 @@ class CreerTournoiControleur:
     def __init__(self):
         self.menu_principal_controleur = menu_controleur.MenuPrincipalControleur()
         self.infos_tournoi = []
+        self.liste_joueurs = []
         self.objet_tournoi = None
         self.creer_joueur_controleur = joueur_controleur.CreerJoueurControleur()
         # self.lancer_tournoi_controleur = LancerTournoiControleur()
@@ -99,16 +126,16 @@ class CreerTournoiControleur:
         self.infos_tournoi.append(self.ajout_description())
         self.infos_tournoi.append(self.ajout_nombre_tours())
         self.infos_tournoi.append(self.ajout_nombre_joueurs())
-        entree = input("Joueurs aléatoires? (Y/N) ==> ")
+        entree = input("Créer des joueurs aléatoires? (Y/N) ==> ")
         if entree == 'y' or entree == 'Y':
             self.infos_tournoi.append(self.ajout_joueurs_aleatoires())
         else:
-            self.infos_tournoi.append(self.ajout_joueurs())
+            self.ajout_joueurs()
+            self.infos_tournoi.append(self.liste_joueurs)
         self.objet_tournoi = self.creer_obj_tournoi(self.infos_tournoi)
         print("==========================================================\n"
               "==================Nouveau tournoi créé !==================\n"
-              "==========================================================\n"
-              "")
+              "==========================================================\n")
         print(self.objet_tournoi)
         print("Voulez-vous maintenant lancer ce tournoi ?")
         choix_valide = False
@@ -211,7 +238,7 @@ class CreerTournoiControleur:
         print("Choisir le contrôle du temps:\n"
               "1) Bullet\n"
               "2) Blitz\n"
-              "3) Coup rapide\n")
+              "3) Coup rapide")
         while True:
             choix = input("==> ")
             if choix == '1':
@@ -247,19 +274,24 @@ class CreerTournoiControleur:
         return nombre_joueurs
 
     def ajout_joueurs_aleatoires(self):
+        """
+        Créé et retourne une liste de joueurs aléatoire.
+        """
         nombre_joueurs = int(self.infos_tournoi[6])
         liste_joueurs = cree_joueurs_alea(nombre_joueurs)
         print(f"{nombre_joueurs} joueurs aléatoires ont été créés")
         return liste_joueurs
 
     def ajout_joueurs(self):
+        """
+        Lance la création de joueurs et les ajoute à self.liste_joueurs
+        """
         nombre_joueurs = int(self.infos_tournoi[6])
-        liste_joueurs = []
         for i in range(nombre_joueurs):
             print(f"Création du joueur N°{i + 1}...\n")
-            joueur = self.creer_joueur_controleur()
-            liste_joueurs.append(joueur)
-        return liste_joueurs
+            joueur = self.creer_joueur_controleur.creer_obj_joueur()
+            self.liste_joueurs.append(joueur)
+            print(self.liste_joueurs)
 
 
 class TournoiTest:
@@ -272,6 +304,5 @@ class TournoiTest:
                                "Bullet", "Le premier tournoi de 2022")
 
         tournoi_test = Tests(tournoi_rois)
-        print("ici!!")
         tournoi_test.run()
         self.menu_principal_controleur()

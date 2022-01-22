@@ -37,16 +37,37 @@ class Tournoi:
         self.matchs_joues = []
 
     def __str__(self):
-        return f"========================================\n" \
-               f"----Tournoi: {self.nom}----,\n" \
-               f"lieu: {self.lieu},\n" \
-               f"date: {self.date},\n" \
-               f"contrôle du temps: {self.controle_temps},\n" \
-               f"description: {self.descritpion},\n" \
-               f"nombre de tours: {self.nombre_tours},\n" \
-               f"nombre de joueurs: {len(self.joueurs)},\n" \
-               f"tour en cours: {len(self.tournees)},\n" \
-               f"========================================\n"
+        return f"----Tournoi: {self.nom}----,\n" \
+               f"Lieu: {self.lieu},\n" \
+               f"Date: {self.date},\n" \
+               f"Contrôle du temps: {self.controle_temps},\n" \
+               f"Description: {self.descritpion},\n" \
+               f"Nombre de tours: {self.nombre_tours},\n" \
+               f"Nombre de joueurs: {len(self.joueurs)},\n" \
+               f"Tour en cours: {len(self.tournees)}\n"
 
     def __repr__(self):
         return str(self)
+
+    def vainqueur_tournoi(self):
+        """
+        Retourne le vainqueur du tournoi, plusieurs si égalité des points.
+        Si plusieurs: ils sont classés du moins bon ELO au meilleur.
+        """
+        liste_joueurs = self.joueurs
+        liste_joueurs_tri = sorted(liste_joueurs,
+                                   key=lambda joueur: joueur.classement)
+        liste_joueurs_par_points = sorted(liste_joueurs_tri,
+                                          key=lambda
+                                              joueur: joueur.total_points_tournoi,
+                                          reverse=True)
+        points = liste_joueurs_tri[0].total_points_tournoi
+        liste_vainqueurs = [v for v in liste_joueurs_par_points if
+                            v.total_points_tournoi == points]
+        if len(liste_vainqueurs) == 1:
+            vainqueur = f"{liste_vainqueurs[0].nom_famille} {liste_vainqueurs[0].prenom}"
+        else:
+            vainqueur = "Égalité: "
+            for joueur in liste_vainqueurs:
+                vainqueur += f"{joueur.nom_famille} {joueur.prenom}, "
+        return vainqueur

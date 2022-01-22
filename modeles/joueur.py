@@ -1,6 +1,3 @@
-from modeles.data_joueurs import DataJoueurs
-
-
 class Joueur:
     """
     Représente un joueur d'échecs
@@ -28,14 +25,13 @@ class Joueur:
         self.classement = classement
         self.total_points_tournoi = 0
         self.adversaires = []
-        self.data_joueurs = DataJoueurs()
 
     def __str__(self):
         return f"----Joueur: {self.nom_famille} {self.prenom}----,\n" \
-               f"date de naissance: {self.date_naissance},\n" \
-               f"sexe: {self.sexe},\n" \
-               f"classement: {self.classement},\n" \
-               f"total points: {self.total_points_tournoi}"
+               f"Date de naissance: {self.date_naissance},\n" \
+               f"Sexe: {self.sexe},\n" \
+               f"Classement: {self.classement},\n" \
+               f"Total points: {self.total_points_tournoi}\n"
 
     def __repr__(self):
         return str(self)

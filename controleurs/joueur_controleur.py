@@ -11,7 +11,7 @@ class RapportJoueurs:
 
 class CreerJoueurControleur:
     """
-    Créé un nouveau joueur et l'ajoute à la variable globale DATA_JOUEURS
+    Créé un nouveau joueur
     """
 
     def __init__(self):
@@ -19,24 +19,23 @@ class CreerJoueurControleur:
         self.infos_joueur = []
         self.objet_joueur = None
 
-    def __call__(self):
-        print("Creation de joueur...\n")
+    def creer_obj_joueur(self):
+        """
+        Créé puis retourne un objet joueur
+        """
         self.infos_joueur.append(self.ajout_nom())
         self.infos_joueur.append(self.ajout_prenom())
         self.infos_joueur.append(self.ajout_classement())
         self.infos_joueur.append(self.ajout_anniversaire())
         self.infos_joueur.append(self.ajout_sexe())
-        self.objet_joueur = self.creer_obj_joueur(self.infos_joueur)
+        self.objet_joueur = Joueur(self.infos_joueur[0], self.infos_joueur[1],
+                        self.infos_joueur[2], self.infos_joueur[3],
+                        self.infos_joueur[4])
         print("==========================================================\n"
               "===============Nouveau joueur enregistré !================\n"
               "==========================================================\n"
               "")
         return self.objet_joueur
-
-    def creer_obj_joueur(self, infos_joueur):
-        joueur = Joueur(infos_joueur[0], infos_joueur[1], infos_joueur[2],
-                        infos_joueur[3], infos_joueur[4])
-        return joueur
 
     def ajout_nom(self):
         nom_joueur = None
