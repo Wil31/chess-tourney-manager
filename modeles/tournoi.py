@@ -61,7 +61,7 @@ class Tournoi:
                                           key=lambda
                                               joueur: joueur.total_points_tournoi,
                                           reverse=True)
-        points = liste_joueurs_tri[0].total_points_tournoi
+        points = liste_joueurs_par_points[0].total_points_tournoi
         liste_vainqueurs = [v for v in liste_joueurs_par_points if
                             v.total_points_tournoi == points]
         if len(liste_vainqueurs) == 1:

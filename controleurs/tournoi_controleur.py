@@ -13,6 +13,7 @@ class LancerTournoiControleur:
 
     def __init__(self, tournoi):
         self.tournoi_actuel = tournoi
+        self.vues = vue_principale.MenuPrincipal()
 
     def __call__(self):
         self.rapports = vue_principale.Rapports(self.tournoi_actuel)
@@ -21,11 +22,14 @@ class LancerTournoiControleur:
             self.tours_suivants()
 
         while True:
-            entree = input(
-                "Tournoi terminé, voulez-vous afficher le résultat?\n"
-                "Y/N ==> ")
-            if entree in ('Y', 'y'):
+            self.vues.menu_fin_tournoi()
+            entree = input("==> ")
+            if entree == '1':
                 self.rapports.resulats_tournoi()
+            if entree == '2':
+                self.rapports.details_resultats()
+            if entree in ('X', 'x'):
+                menu_controleur.FermerApplication()
 
     def premier_tour(self):
         """
