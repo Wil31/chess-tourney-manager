@@ -59,13 +59,15 @@ class Tournoi:
                                    key=lambda joueur: joueur.classement)
         liste_joueurs_par_points = sorted(liste_joueurs_tri,
                                           key=lambda
-                                              joueur: joueur.total_points_tournoi,
+                                              joueur:
+                                          joueur.total_points_tournoi,
                                           reverse=True)
         points = liste_joueurs_par_points[0].total_points_tournoi
         liste_vainqueurs = [v for v in liste_joueurs_par_points if
                             v.total_points_tournoi == points]
         if len(liste_vainqueurs) == 1:
-            vainqueur = f"{liste_vainqueurs[0].nom_famille} {liste_vainqueurs[0].prenom}"
+            vainqueur = f"{liste_vainqueurs[0].nom_famille} " \
+                        f"{liste_vainqueurs[0].prenom}"
         else:
             vainqueur = "Égalité: "
             for joueur in liste_vainqueurs:

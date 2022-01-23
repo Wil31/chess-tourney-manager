@@ -23,19 +23,24 @@ class Match:
 
     def __str__(self):
         if self.resultat_match is not None:
-            infos_match = f"Match: {self.joueur_1.nom_famille} {self.joueur_1.prenom}" \
-                   f" VS {self.joueur_2.nom_famille} {self.joueur_2.prenom}\n"
+            infos_match = f"Match: {self.joueur_1.nom_famille} " \
+                          f"{self.joueur_1.prenom}" \
+                          f" VS {self.joueur_2.nom_famille} " \
+                          f"{self.joueur_2.prenom}\n"
             match self.resultat_joueur_1:
                 case 1:
-                    gagnant = f"VICTOIRE: {self.joueur_1.nom_famille} {self.joueur_1.prenom}"
+                    gagnant = f"VICTOIRE: {self.joueur_1.nom_famille} " \
+                              f"{self.joueur_1.prenom}"
                     return infos_match + gagnant
                 case 0:
-                    gagnant = f"VICTOIRE: {self.joueur_2.nom_famille} {self.joueur_2.prenom}"
+                    gagnant = f"VICTOIRE: {self.joueur_2.nom_famille} " \
+                              f"{self.joueur_2.prenom}"
                     return infos_match + gagnant
                 case 0.5:
                     return infos_match + "MATCH NUL"
         else:
-            return f"Match à jouer: {self.joueur_1.nom_famille} {self.joueur_1.prenom}" \
+            return f"Match à jouer: {self.joueur_1.nom_famille} " \
+                   f"{self.joueur_1.prenom}" \
                    f" VS {self.joueur_2.nom_famille} {self.joueur_2.prenom}"
 
     def __repr__(self):

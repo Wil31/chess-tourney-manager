@@ -50,12 +50,13 @@ class Rapports:
                                key=lambda joueur: joueur.classement)
         liste_joueurs_par_points = sorted(liste_joueurs,
                                           key=lambda
-                                              joueur: joueur.total_points_tournoi,
+                                              joueur:
+                                          joueur.total_points_tournoi,
                                           reverse=True)
         print("=====DETAIL RESULATS JOUEURS=====")
         for joueur in liste_joueurs_par_points:
-            print(f"----Joueur: {joueur.nom_famille} {joueur.prenom}----,\n" \
-                  f"Classement: {joueur.classement},\n" \
+            print(f"----Joueur: {joueur.nom_famille} {joueur.prenom}----,\n"
+                  f"Classement: {joueur.classement},\n"
                   f"Total points tournoi: {joueur.total_points_tournoi}\n")
 
 
@@ -92,37 +93,5 @@ class MenuPrincipal:
               "2) Voir le détails de joueurs -------------------\n"
               "-------------------------------------------------\n"
               "x) Quitter --------------------------------------\n"
-              "-------------------------------------------------\n"
-              "")
-
-    def afficher_menu_gestion_tournoi(self):
-        """
-        Menu gestion des tournois
-        """
-        print("-------------------------------------------------\n"
-              "----------------- MENU TOURNOI ------------------\n"
-              "-------------------------------------------------\n"
-              "-- Choisir une option: --------------------------\n"
-              "1) Créer un tournoi -----------------------------\n"
-              "2) Afficher les tournois en cours ---------------\n"
-              "3) Lancer un tournoi ----------------------------\n"
-              "-------------------------------------------------\n"
-              "x) Retour menu principal ------------------------\n"
-              "-------------------------------------------------\n"
-              "")
-
-    def afficher_menu_gestion_joueurs(self):
-        """
-        Menu gestion des joueurs
-        """
-        print("-------------------------------------------------\n"
-              "------------------ MENU JOUEUR ------------------\n"
-              "-------------------------------------------------\n"
-              "-- Choisir une option: --------------------------\n"
-              "1) Créer un joueur ------------------------------\n"
-              "2) Afficher liste des joueurs -------------------\n"
-              "3) Mettre à jour classement ---------------------\n"
-              "-------------------------------------------------\n"
-              "x) Retour menu principal ------------------------\n"
               "-------------------------------------------------\n"
               "")

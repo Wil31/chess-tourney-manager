@@ -1,8 +1,7 @@
 from controleurs import menu_controleur, joueur_controleur
 from modeles.tour import Tour
 from modeles.tournoi import Tournoi
-from tests.tests import Tests
-from tests.tests import cree_joueurs_alea
+from tests import tests
 from vues import vue_principale
 
 
@@ -50,7 +49,8 @@ class LancerTournoiControleur:
                     resultat_valide = False
                     while not resultat_valide:
                         resultat_joueur_1 = input(
-                            f"\nEntrez le résultat de {match.joueur_1.nom_famille}"
+                            f"\nEntrez le résultat de "
+                            f"{match.joueur_1.nom_famille}"
                             f" {match.joueur_1.prenom}\n"
                             f"1: Victoire | 0: Défaire | N: Match nul ==> ")
                         match resultat_joueur_1:
@@ -63,8 +63,8 @@ class LancerTournoiControleur:
                             case ('n' | 'N'):
                                 resultat_joueur_2 = resultat_joueur_1 = 0.5
                                 resultat_valide = True
-                    match.ajouter_resultats_match(float(resultat_joueur_1),
-                                                  float(resultat_joueur_2))
+                        match.ajouter_resultats_match(float(resultat_joueur_1),
+                                                      float(resultat_joueur_2))
             else:
                 continue
         self.rapports.resultats_tour(premier_tour)
@@ -88,9 +88,11 @@ class LancerTournoiControleur:
                         resultat_valide = False
                         while not resultat_valide:
                             resultat_joueur_1 = input(
-                                f"Entrez le résultat de {match.joueur_1.nom_famille}"
+                                f"Entrez le résultat de "
+                                f"{match.joueur_1.nom_famille}"
                                 f" {match.joueur_1.prenom}\n"
-                                f"1: Victoire | 0: Défaire | N: Match nul ==> ")
+                                f"1: Victoire | 0: Défaire | N: Match nul "
+                                f"==> ")
                             match resultat_joueur_1:
                                 case '0':
                                     resultat_joueur_2 = 1
@@ -101,8 +103,9 @@ class LancerTournoiControleur:
                                 case ('n' | 'N'):
                                     resultat_joueur_2 = resultat_joueur_1 = 0.5
                                     resultat_valide = True
-                        match.ajouter_resultats_match(float(resultat_joueur_1),
-                                                      float(resultat_joueur_2))
+                            match.ajouter_resultats_match(
+                                float(resultat_joueur_1),
+                                float(resultat_joueur_2))
                 else:
                     pass
             self.rapports.resultats_tour(ce_tour)
@@ -114,12 +117,13 @@ class CreerTournoiControleur:
     """
 
     def __init__(self):
-        self.menu_principal_controleur = menu_controleur.MenuPrincipalControleur()
+        self.menu_principal_controleur = \
+            menu_controleur.MenuPrincipalControleur()
         self.infos_tournoi = []
         self.liste_joueurs = []
         self.objet_tournoi = None
-        self.creer_joueur_controleur = joueur_controleur.CreerJoueurControleur()
-        # self.lancer_tournoi_controleur = LancerTournoiControleur()
+        self.creer_joueur_controleur = \
+            joueur_controleur.CreerJoueurControleur()
 
     def __call__(self):
         print("Creation de tournoi...\n")
@@ -145,7 +149,7 @@ class CreerTournoiControleur:
               "==================Nouveau tournoi créé !==================\n"
               "==========================================================\n")
         print(self.objet_tournoi)
-        print("Voulez-vous maintenant lancer ce tournoi ?")
+        print("Voulez-vous lancer ce tournoi maintenant ?")
         choix_valide = False
         while not choix_valide:
             choix = input("Y / N ? ==> ")
@@ -155,6 +159,7 @@ class CreerTournoiControleur:
                 choix_valide = True
             if choix in ('N', 'n'):
                 # il faudrait enregistrer le tournoi pour plus tard
+                pass
                 choix_valide = True
 
     def creer_obj_tournoi(self, infos_tournoi):
@@ -162,10 +167,11 @@ class CreerTournoiControleur:
         Créé un objet Tournoi à partir de la liste infos_tournoi
         :type infos_tournoi: list
         """
-        tournoi = Tournoi(infos_tournoi[0], infos_tournoi[1], infos_tournoi[2],
-                          infos_tournoi[3], infos_tournoi[4], infos_tournoi[5],
-                          infos_tournoi[6], infos_tournoi[7])
-        return tournoi
+        obj_tournoi = Tournoi(infos_tournoi[0], infos_tournoi[1],
+                              infos_tournoi[2], infos_tournoi[3],
+                              infos_tournoi[4], infos_tournoi[5],
+                              infos_tournoi[6], infos_tournoi[7])
+        return obj_tournoi
 
     def ajout_nom(self):
         nom_tournoi = None
@@ -286,7 +292,7 @@ class CreerTournoiControleur:
         Créé et retourne une liste de joueurs aléatoire.
         """
         nombre_joueurs = int(self.infos_tournoi[6])
-        liste_joueurs = cree_joueurs_alea(nombre_joueurs)
+        liste_joueurs = tests.cree_joueurs_alea(nombre_joueurs)
         print(f"{nombre_joueurs} joueurs aléatoires ont été créés")
         return liste_joueurs
 
@@ -304,13 +310,15 @@ class CreerTournoiControleur:
 
 class TournoiTest:
     def __init__(self):
-        self.menu_principal_controleur = menu_controleur.MenuPrincipalControleur()
+        self.menu_principal_controleur = \
+            menu_controleur.MenuPrincipalControleur()
 
     def __call__(self):
         # Créer le tournoi test
-        tournoi_rois = Tournoi("Tournoi des Rois", "Toulouse", "16 janvier",
+        tournoi_rois = Tournoi("Tournoi des Rois", "Toulouse",
+                               "16 janvier",
                                "Bullet", "Le premier tournoi de 2022")
 
-        tournoi_test = Tests(tournoi_rois)
+        tournoi_test = tests.Tests(tournoi_rois)
         tournoi_test.run()
         self.menu_principal_controleur()
