@@ -43,3 +43,6 @@ class Joueur:
         :type nouveau_classement: int
         """
         self.classement = nouveau_classement
+
+    def reset_adversaires(self):
+        self.adversaires.clear()

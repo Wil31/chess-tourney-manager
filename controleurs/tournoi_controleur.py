@@ -16,6 +16,8 @@ class LancerTournoiControleur:
 
     def __call__(self):
         self.rapports = vue_principale.Rapports(self.tournoi_actuel)
+        for joueur in self.tournoi_actuel.joueurs:
+            joueur.reset_adversaires()
         self.premier_tour()
         if int(self.tournoi_actuel.nombre_tours) > 1:
             self.tours_suivants()
