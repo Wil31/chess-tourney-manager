@@ -17,7 +17,7 @@ class Tour:
         :param heure_debut: heure de début du tour
         :type heure_debut: str
         :param tournoi: le tournoi dont fait partit le tour
-        :type tournoi: object [Tournoi]
+        :type tournoi: object Tournoi
         """
         self.nom = nom
         self.date_debut = date_debut
@@ -63,7 +63,6 @@ class Tour:
         for joueur_1, joueur_2 in zip(liste_joueurs_sup, liste_joueurs_inf):
             match = Match(joueur_1, joueur_2)
             self.liste_matchs.append(match)
-            self.tournoi.matchs_joues.append(match)
 
     def trier_joueurs_points(self):
         """
@@ -81,29 +80,18 @@ class Tour:
         queue = deque(self.trier_joueurs_points())
         while len(queue) > 0:
             joueur_1 = queue.popleft()
-            joueur_2 = queue.popleft()
+            joueur_2 = None
+            for i in range(0, len(queue)):
+                joueur_2_tmp = queue[i]
+                if joueur_2_tmp not in joueur_1.adversaires:
+                    joueur_2 = queue.pop(i)
+                    break
+                else:
+                    if i == len(queue):
+                        joueur_2 = queue.popleft()
+                    else:
+                        continue
+
             match = Match(joueur_1, joueur_2)
             self.liste_matchs.append(match)
             self.tournoi.matchs_joues.append(match)
-
-        """
-        while len(liste_joueurs_tri) > 0:
-            longueur_list = len(liste_joueurs_tri)
-            joueur_1 = liste_joueurs_tri[-longueur_list]
-            index_joueur_2 = 1 - longueur_list
-            joueur_2 = liste_joueurs_tri[index_joueur_2]
-            if joueur_2 in joueur_1.adversaires:
-                print(">>>>>>>>>>>>>!!!!!!!!!!!!!!!!!!!!<<<<<<<<<<<<<<<")
-                print(f"{joueur_1.nom_famille} a deja joué vs "
-                      f"{joueur_2.nom_famille}")
-                print()
-                new_index_joueur_2 = index_joueur_2 + 1
-                if new_index_joueur_2 > 0:
-                    new_index_joueur_2 = new_index_joueur_2 - 1
-                    joueur_2 = liste_joueurs_tri[new_index_joueur_2]
-                    break
-                joueur_2 = liste_joueurs_tri[new_index_joueur_2]
-            # joueur_2 = liste_joueurs_tri.pop(new_index_joueur_2)
-            match = Match(joueur_1, joueur_2)
-            self.liste_matchs.append(match)
-        """

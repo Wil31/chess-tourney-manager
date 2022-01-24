@@ -17,7 +17,6 @@ class CreerJoueurControleur:
     def __init__(self):
         self.menu_principal_controleur = menu_controleur.MenuPrincipalControleur()
         self.infos_joueur = []
-        self.objet_joueur = None
 
     def creer_obj_joueur(self):
         """
@@ -28,14 +27,14 @@ class CreerJoueurControleur:
         self.infos_joueur.append(self.ajout_classement())
         self.infos_joueur.append(self.ajout_anniversaire())
         self.infos_joueur.append(self.ajout_sexe())
-        self.objet_joueur = Joueur(self.infos_joueur[0], self.infos_joueur[1],
-                        self.infos_joueur[2], self.infos_joueur[3],
-                        self.infos_joueur[4])
+        objet_joueur = Joueur(self.infos_joueur[0], self.infos_joueur[1],
+                              self.infos_joueur[2], self.infos_joueur[3],
+                              self.infos_joueur[4])
         print("==========================================================\n"
               "===============Nouveau joueur enregistré !================\n"
               "==========================================================\n"
               "")
-        return self.objet_joueur
+        return objet_joueur
 
     def ajout_nom(self):
         nom_joueur = None

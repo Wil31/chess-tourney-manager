@@ -25,6 +25,8 @@ def genere_resultats_alea(tour):
 def cree_joueurs_alea(nombre):
     """
     Créer x joueurs aléatoires
+    :param nombre: nombre de joueurs à créer
+    :type nombre: int
     """
     liste_joueurs = []
     for i in range(nombre):
@@ -39,6 +41,9 @@ class Tests:
         self.tournoi = tournoi
 
     def affichage_tour(self, tour):
+        """
+        :type tour: object Tour
+        """
         print("==========================================================")
         print(tour)
         print()

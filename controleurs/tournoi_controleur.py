@@ -11,8 +11,12 @@ class LancerTournoiControleur:
     """
 
     def __init__(self, tournoi):
+        """
+        :type tournoi: object Tournoi
+        """
         self.tournoi_actuel = tournoi
         self.vues = vue_principale.MenuPrincipal()
+        self.controleur_actuel = None
 
     def __call__(self):
         self.rapports = vue_principale.Rapports(self.tournoi_actuel)
@@ -30,7 +34,8 @@ class LancerTournoiControleur:
             if entree == '2':
                 self.rapports.details_resultats()
             if entree in ('X', 'x'):
-                menu_controleur.FermerApplication()
+                self.controleur_actuel = menu_controleur.FermerApplication()
+                self.controleur_actuel()
 
     def premier_tour(self):
         """
@@ -47,26 +52,7 @@ class LancerTournoiControleur:
             entree = input("Appuyez sur Y pour entrer les résultats ==> ")
             if entree == "Y" or entree == 'y':
                 entree_valide = True
-                for match in premier_tour.liste_matchs:
-                    resultat_valide = False
-                    while not resultat_valide:
-                        resultat_joueur_1 = input(
-                            f"\nEntrez le résultat de "
-                            f"{match.joueur_1.nom_famille}"
-                            f" {match.joueur_1.prenom}\n"
-                            f"1: Victoire | 0: Défaire | N: Match nul ==> ")
-                        match resultat_joueur_1:
-                            case '0':
-                                resultat_joueur_2 = 1
-                                resultat_valide = True
-                            case '1':
-                                resultat_joueur_2 = 0
-                                resultat_valide = True
-                            case ('n' | 'N'):
-                                resultat_joueur_2 = resultat_joueur_1 = 0.5
-                                resultat_valide = True
-                        match.ajouter_resultats_match(float(resultat_joueur_1),
-                                                      float(resultat_joueur_2))
+                self.entrer_resultats_matchs(premier_tour)
             else:
                 continue
         self.rapports.resultats_tour(premier_tour)
@@ -86,31 +72,42 @@ class LancerTournoiControleur:
                 entree = input("Appuyez sur Y pour entrer les résultats ==> ")
                 if entree == "Y" or entree == 'y':
                     entree_valide = True
-                    for match in ce_tour.liste_matchs:
-                        resultat_valide = False
-                        while not resultat_valide:
-                            resultat_joueur_1 = input(
-                                f"Entrez le résultat de "
-                                f"{match.joueur_1.nom_famille}"
-                                f" {match.joueur_1.prenom}\n"
-                                f"1: Victoire | 0: Défaire | N: Match nul "
-                                f"==> ")
-                            match resultat_joueur_1:
-                                case '0':
-                                    resultat_joueur_2 = 1
-                                    resultat_valide = True
-                                case '1':
-                                    resultat_joueur_2 = 0
-                                    resultat_valide = True
-                                case ('n' | 'N'):
-                                    resultat_joueur_2 = resultat_joueur_1 = 0.5
-                                    resultat_valide = True
-                            match.ajouter_resultats_match(
-                                float(resultat_joueur_1),
-                                float(resultat_joueur_2))
+                    self.entrer_resultats_matchs(ce_tour)
                 else:
-                    pass
+                    continue
             self.rapports.resultats_tour(ce_tour)
+
+    def entrer_resultats_matchs(self, tour):
+        """
+        Méthode pour la saisie des scores des matchs d'un tour
+        :type tour: object Tour
+        """
+        for match in tour.liste_matchs:
+            resultat_valide = False
+            while not resultat_valide:
+                resultat_joueur_1 = input(
+                    f"Entrez le résultat de "
+                    f"{match.joueur_1.nom_famille}"
+                    f" {match.joueur_1.prenom}\n"
+                    f"1: Victoire | 0: Défaire | N: Match nul "
+                    f"==> ")
+                if resultat_joueur_1 in ('0', '1', 'n', 'N'):
+                    resultat_valide = True
+                    match resultat_joueur_1:
+                        case '0':
+                            resultat_joueur_2 = 1
+                        case '1':
+                            resultat_joueur_2 = 0
+                        case ('n' | 'N'):
+                            resultat_joueur_2 = resultat_joueur_1 \
+                                = 0.5
+                    match.ajouter_resultats_match(
+                        float(resultat_joueur_1),
+                        float(resultat_joueur_2))
+
+                    self.tournoi_actuel.matchs_joues.append(match)
+                else:
+                    continue
 
 
 class CreerTournoiControleur:
@@ -124,8 +121,6 @@ class CreerTournoiControleur:
         self.infos_tournoi = []
         self.liste_joueurs = []
         self.objet_tournoi = None
-        self.creer_joueur_controleur = \
-            joueur_controleur.CreerJoueurControleur()
 
     def __call__(self):
         print("Creation de tournoi...\n")
@@ -161,8 +156,7 @@ class CreerTournoiControleur:
                 choix_valide = True
             if choix in ('N', 'n'):
                 # il faudrait enregistrer le tournoi pour plus tard
-                pass
-                choix_valide = True
+                continue
 
     def creer_obj_tournoi(self, infos_tournoi):
         """
@@ -305,9 +299,9 @@ class CreerTournoiControleur:
         nombre_joueurs = int(self.infos_tournoi[6])
         for i in range(nombre_joueurs):
             print(f"Création du joueur N°{i + 1}...\n")
-            joueur = self.creer_joueur_controleur.creer_obj_joueur()
-            self.liste_joueurs.append(joueur)
-            print(self.liste_joueurs)
+            controleur = joueur_controleur.CreerJoueurControleur()
+            un_joueur = controleur.creer_obj_joueur()
+            self.liste_joueurs.append(un_joueur)
 
 
 class TournoiTest:

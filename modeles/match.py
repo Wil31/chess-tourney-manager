@@ -18,8 +18,6 @@ class Match:
         self.liste_1 = []
         self.liste_2 = []
         self.resultat_match = None
-        self.joueur_1.adversaires.append(self.joueur_2)
-        self.joueur_2.adversaires.append(self.joueur_1)
 
     def __str__(self):
         if self.resultat_match is not None:
@@ -61,3 +59,9 @@ class Match:
         self.liste_1 = [self.joueur_1, self.resultat_joueur_1]
         self.liste_2 = [self.joueur_2, self.resultat_joueur_2]
         self.resultat_match = (self.liste_1, self.liste_2)
+
+        self.ajouter_adversaires_joueurs()
+
+    def ajouter_adversaires_joueurs(self):
+        self.joueur_1.adversaires.append(self.joueur_2)
+        self.joueur_2.adversaires.append(self.joueur_1)
