@@ -1,5 +1,6 @@
 from modeles.match import Match
 from collections import deque
+from datetime import datetime
 
 
 class Tour:
@@ -88,7 +89,7 @@ class Tour:
                     queue.remove(joueur_2_tmp)
                     break
                 else:
-                    if i == (len(queue)-1):
+                    if i == (len(queue) - 1):
                         joueur_2 = queue.popleft()
                     else:
                         continue
@@ -96,3 +97,30 @@ class Tour:
             match = Match(joueur_1, joueur_2)
             self.liste_matchs.append(match)
             self.tournoi.matchs_joues.append(match)
+
+    def lancement_tour(self):
+        """
+        Méthode pour lancer le tour et enregistrer la date et l'heure de début
+        """
+        while True:
+            entree = input(f"Appuyer sur Y pour lancer le TOUR '{self.nom}' "
+                           f"==> ")
+            if entree in ('Y', 'y'):
+                date_heure = datetime.now()
+                self.date_debut = date_heure.strftime("%d/%m/%Y")
+                self.heure_debut = date_heure.strftime("%H:%M:%S")
+                print("\n=== Début du tour===\n"
+                      f"DATE: {self.date_debut}\n"
+                      f"HEURE: {self.heure_debut}\n")
+                break
+
+    def fin_tour(self):
+        """
+        Méthode pour finir le tour et enregistrer la date et l'heure de début
+        """
+        date_heure = datetime.now()
+        self.date_fin = date_heure.strftime("%d/%m/%Y")
+        self.heure_fin = date_heure.strftime("%H:%M:%S")
+        print("\n=== Fin du tour===\n"
+              f"DATE: {self.date_fin}\n"
+              f"HEURE: {self.heure_fin}\n")

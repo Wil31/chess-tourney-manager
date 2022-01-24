@@ -44,14 +44,15 @@ class LancerTournoiControleur:
         premier_tour = Tour(self.tournoi_actuel, "Tour N°1")
         self.tournoi_actuel.tournees.append(premier_tour)
         premier_tour.generer_paires_initial()
-
         self.rapports.preparation_premier_tour(premier_tour)
+        premier_tour.lancement_tour()
 
         entree_valide = False
         while not entree_valide:
             entree = input("Appuyez sur Y pour entrer les résultats ==> ")
             if entree == "Y" or entree == 'y':
                 entree_valide = True
+                premier_tour.fin_tour()
                 self.entrer_resultats_matchs(premier_tour)
             else:
                 continue
@@ -66,12 +67,14 @@ class LancerTournoiControleur:
             ce_tour.generer_paires()
             self.tournoi_actuel.tournees.append(ce_tour)
             self.rapports.preparation_tour(ce_tour)
+            ce_tour.lancement_tour()
 
             entree_valide = False
             while not entree_valide:
                 entree = input("Appuyez sur Y pour entrer les résultats ==> ")
                 if entree == "Y" or entree == 'y':
                     entree_valide = True
+                    ce_tour.fin_tour()
                     self.entrer_resultats_matchs(ce_tour)
                 else:
                     continue

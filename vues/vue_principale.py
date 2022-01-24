@@ -22,13 +22,12 @@ class Rapports:
         for match in tour.liste_matchs:
             print(match)
             print("   ------------------------------------")
-        print()
 
     def preparation_tour(self, tour):
         """
         :type tour: object Tour
         """
-        print("==================PREPARATION TOUR==================")
+        print("\n==================PREPARATION TOUR==================")
         print(tour)
         # Affiche les infos des matchs du tour
         for match in tour.liste_matchs:
@@ -102,7 +101,7 @@ class MenuPrincipal:
               "-------------------------------------------------\n"
               "-- Choisir une option: --------------------------\n"
               "1) Voir résumé et vainqueur(s) du tournoi -------\n"
-              "2) Voir le détails de joueurs -------------------\n"
+              "2) Voir le détail des joueurs -------------------\n"
               "-------------------------------------------------\n"
               "x) Quitter --------------------------------------\n"
               "-------------------------------------------------\n"
