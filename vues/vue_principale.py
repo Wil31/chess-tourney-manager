@@ -4,9 +4,15 @@ class Rapports:
     """
 
     def __init__(self, tournoi):
+        """
+        :type tournoi: object Tournoi
+        """
         self.tournoi = tournoi
 
     def preparation_premier_tour(self, tour):
+        """
+        :type tour: object Tour
+        """
         print("==================PREPARATION TOUR==================")
         print(tour)
         print("==================INFOS JOUEURS==================")
@@ -19,6 +25,9 @@ class Rapports:
         print()
 
     def preparation_tour(self, tour):
+        """
+        :type tour: object Tour
+        """
         print("==================PREPARATION TOUR==================")
         print(tour)
         # Affiche les infos des matchs du tour
@@ -28,6 +37,9 @@ class Rapports:
         print()
 
     def resultats_tour(self, tour):
+        """
+        :type tour: object Tour
+        """
         print(f"\n========RESULTATS {tour.nom}========")
         for match in tour.liste_matchs:
             print(match)
