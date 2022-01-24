@@ -54,7 +54,7 @@ class Tour:
 
     def generer_paires_initial(self):
         """
-        Méthode pour générer les paires du premier tour
+        Méthode pour générer les paires (match) du premier tour
         """
         liste_joueurs_tri = self.trier_joueurs_classement()
         nombre_joueurs = len(liste_joueurs_tri)
@@ -75,19 +75,20 @@ class Tour:
 
     def generer_paires(self):
         """
-        Méthode pour générer les paires des tours suivants
+        Méthode pour générer les paires (matchs) des tours suivants
         """
         queue = deque(self.trier_joueurs_points())
-        while len(queue) > 0:
+        while len(queue) > 1:
             joueur_1 = queue.popleft()
             joueur_2 = None
             for i in range(0, len(queue)):
                 joueur_2_tmp = queue[i]
                 if joueur_2_tmp not in joueur_1.adversaires:
-                    joueur_2 = queue.pop(i)
+                    joueur_2 = joueur_2_tmp
+                    queue.remove(joueur_2_tmp)
                     break
                 else:
-                    if i == len(queue):
+                    if i == (len(queue)-1):
                         joueur_2 = queue.popleft()
                     else:
                         continue
