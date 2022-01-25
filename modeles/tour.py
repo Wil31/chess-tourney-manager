@@ -47,7 +47,7 @@ class Tour:
         :return: liste des joueurs triée
         :rtype: list
         """
-        liste_joueurs = self.tournoi.joueurs
+        liste_joueurs = self.tournoi.liste_joueurs
         liste_joueurs_tri = sorted(liste_joueurs,
                                    key=lambda joueur: joueur.classement,
                                    reverse=True)
@@ -96,7 +96,6 @@ class Tour:
 
             match = Match(joueur_1, joueur_2)
             self.liste_matchs.append(match)
-            self.tournoi.matchs_joues.append(match)
 
     def lancement_tour(self):
         """

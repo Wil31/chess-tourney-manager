@@ -20,7 +20,7 @@ class LancerTournoiControleur:
 
     def __call__(self):
         self.rapports = vue_principale.Rapports(self.tournoi_actuel)
-        for joueur in self.tournoi_actuel.joueurs:
+        for joueur in self.tournoi_actuel.liste_joueurs:
             joueur.reset_adversaires()
         self.premier_tour()
         if int(self.tournoi_actuel.nombre_tours) > 1:
@@ -107,8 +107,6 @@ class LancerTournoiControleur:
                     match.ajouter_resultats_match(
                         float(resultat_joueur_1),
                         float(resultat_joueur_2))
-
-                    self.tournoi_actuel.matchs_joues.append(match)
                 else:
                     continue
 

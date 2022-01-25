@@ -5,7 +5,7 @@ class Tournoi:
 
     def __init__(self, nom=None, lieu=None, date=None, controle_temps=None,
                  description=None, nombre_tours=None, nombre_joueurs=None,
-                 joueurs=None):
+                 liste_joueurs=None, tournees=None):
         """
         Initialise une instance de Tournoi.
         :param nom: nom du tournoi
@@ -22,39 +22,71 @@ class Tournoi:
         :type nombre_tours: int
         :param nombre_joueurs: nombre de joueurs participants
         :type nombre_joueurs: int
-        :param joueurs: liste des objets joueurs participants
-        :type joueurs: list [Joueur]
+        :param liste_joueurs: liste des objets joueurs participants
+        :type liste_joueurs: list [Joueur]
         """
+        if tournees is None:
+            tournees = []
         self.nom = nom
         self.lieu = lieu
         self.date = date
         self.controle_temps = controle_temps
-        self.descritpion = description
+        self.description = description
         self.nombre_tours = nombre_tours
         self.nombre_joueurs = nombre_joueurs
-        self.joueurs = joueurs
-        self.tournees = []
-        self.matchs_joues = []
+        self.liste_joueurs = liste_joueurs
+        self.tournees = tournees
 
     def __str__(self):
         return f"----Tournoi: {self.nom}----,\n" \
                f"Lieu: {self.lieu},\n" \
                f"Date: {self.date},\n" \
                f"Contrôle du temps: {self.controle_temps},\n" \
-               f"Description: {self.descritpion},\n" \
+               f"Description: {self.description},\n" \
                f"Nombre de tours: {self.nombre_tours},\n" \
-               f"Nombre de joueurs: {len(self.joueurs)},\n" \
+               f"Nombre de joueurs: {len(self.liste_joueurs)},\n" \
                f"Tour en cours: {len(self.tournees)}\n"
 
     def __repr__(self):
         return str(self)
+
+    def creer_instance_tournoi(self, tournoi_sauve):
+        """
+        Méthode d'instanciation de tournoi à partir de données texte
+        """
+        nom = tournoi_sauve['Nom du tournoi']
+        lieu = tournoi_sauve['Lieu']
+        date = tournoi_sauve['Date']
+        nombre_tours = tournoi_sauve['Nombre de tours']
+        controle_temps = tournoi_sauve['Controle du temps']
+        description = tournoi_sauve['Description']
+        liste_joueurs = tournoi_sauve["Liste joueurs"]
+        nombre_joueurs = tournoi_sauve['Nombre de joueurs']
+        tournees = tournoi_sauve["Tours"]
+        return Tournoi(nom, lieu, date, controle_temps, description,
+                       nombre_tours, nombre_joueurs, liste_joueurs, tournees)
+
+    def save(self):
+        """
+        Méthode de sérialisation du modèle tournoi
+        """
+        tournoi_sauve = {'Nom du tournoi': self.nom, 'Lieu': self.lieu,
+                         'Date': self.date,
+                         'Nombre de tours': self.nombre_tours,
+                         'Controle du temps': self.controle_temps,
+                         'Description': self.description,
+                         "Tours": self.tournees,
+                         'Nombre de joueurs': self.nombre_joueurs,
+                         'Liste joueurs': self.liste_joueurs}
+
+        return tournoi_sauve
 
     def vainqueur_tournoi(self):
         """
         Retourne le vainqueur du tournoi, plusieurs si égalité des points.
         Si plusieurs: ils sont classés du moins bon ELO au meilleur.
         """
-        liste_joueurs = self.joueurs
+        liste_joueurs = self.liste_joueurs
         liste_joueurs_tri = sorted(liste_joueurs,
                                    key=lambda joueur: joueur.classement)
         liste_joueurs_par_points = sorted(liste_joueurs_tri,

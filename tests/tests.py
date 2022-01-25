@@ -48,7 +48,7 @@ class Tests:
         print(tour)
         print()
         # Affiche les infos des joueurs
-        for joueur in self.tournoi.joueurs:
+        for joueur in self.tournoi.liste_joueurs:
             print(joueur)
         print()
         # Affiche les infos des matchs du tour 1
@@ -57,7 +57,7 @@ class Tests:
         print()
 
     def run(self):
-        self.tournoi.joueurs = cree_joueurs_alea(8)
+        self.tournoi.liste_joueurs = cree_joueurs_alea(8)
         # Créer un tour
         tour_1 = Tour("Tour n°1", "15 janvier", "17:11", self.tournoi)
         # Générer les paires et les premiers matchs

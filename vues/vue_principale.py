@@ -16,7 +16,7 @@ class Rapports:
         print("==================PREPARATION TOUR==================")
         print(tour)
         print("==================INFOS JOUEURS==================")
-        for joueur in self.tournoi.joueurs:
+        for joueur in self.tournoi.liste_joueurs:
             print(joueur)
         # Affiche les infos des matchs du tour 1
         for match in tour.liste_matchs:
@@ -51,13 +51,13 @@ class Rapports:
               f"Lieu: {self.tournoi.lieu},\n"
               f"Date: {self.tournoi.date},\n"
               f"Contrôle du temps: {self.tournoi.controle_temps},\n"
-              f"Description: {self.tournoi.descritpion},\n"
+              f"Description: {self.tournoi.description},\n"
               f"Nombre de tours: {self.tournoi.nombre_tours},\n"
-              f"Nombre de joueurs: {len(self.tournoi.joueurs)},\n"
+              f"Nombre de joueurs: {len(self.tournoi.liste_joueurs)},\n"
               f"VAINQUEUR(S) DU TOURNOI: {vainqueur}")
 
     def details_resultats(self):
-        liste_joueurs = sorted(self.tournoi.joueurs,
+        liste_joueurs = sorted(self.tournoi.liste_joueurs,
                                key=lambda joueur: joueur.classement)
         liste_joueurs_par_points = sorted(liste_joueurs,
                                           key=lambda
