@@ -1,8 +1,7 @@
 import names
 import random
 
-from modeles.joueur import Joueur
-from modeles.tour import Tour
+from modeles import modele_joueur, modele_tour
 
 
 def genere_resultats_alea(tour):
@@ -30,7 +29,7 @@ def cree_joueurs_alea(nombre):
     """
     liste_joueurs = []
     for i in range(nombre):
-        liste_joueurs.append(Joueur(names.get_last_name(),
+        liste_joueurs.append(modele_joueur.Joueur(names.get_last_name(),
                                     names.get_first_name(),
                                     random.randint(1300, 2900)))
     return liste_joueurs
@@ -48,7 +47,7 @@ class Tests:
         print(tour)
         print()
         # Affiche les infos des joueurs
-        for joueur in self.tournoi.liste_joueurs:
+        for joueur in self.tournoi.ids_joueurs:
             print(joueur)
         print()
         # Affiche les infos des matchs du tour 1
@@ -57,9 +56,9 @@ class Tests:
         print()
 
     def run(self):
-        self.tournoi.liste_joueurs = cree_joueurs_alea(8)
+        self.tournoi.ids_joueurs = cree_joueurs_alea(8)
         # Créer un tour
-        tour_1 = Tour("Tour n°1", "15 janvier", "17:11", self.tournoi)
+        tour_1 = modele_tour.Tour("Tour n°1", "15 janvier", "17:11", self.tournoi)
         # Générer les paires et les premiers matchs
         tour_1.generer_paires_initial()
         genere_resultats_alea(tour_1)
@@ -69,13 +68,13 @@ class Tests:
         self.affichage_tour(tour_1)
 
         # Créer un tour 2
-        tour_2 = Tour("Tour n°2", "15 janvier", "17:30", self.tournoi)
+        tour_2 = modele_tour.Tour("Tour n°2", "15 janvier", "17:30", self.tournoi)
         tour_2.generer_paires()
         genere_resultats_alea(tour_2)
         self.affichage_tour(tour_2)
 
         # Créer un tour 3
-        tour_3 = Tour("Tour n°3", "15 janvier", "17:40", self.tournoi)
+        tour_3 = modele_tour.Tour("Tour n°3", "15 janvier", "17:40", self.tournoi)
         tour_3.generer_paires()
         genere_resultats_alea(tour_3)
         self.affichage_tour(tour_3)

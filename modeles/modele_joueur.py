@@ -12,7 +12,7 @@ class Joueur:
 
     def __init__(self, nom_famille=None, prenom=None, classement=None,
                  date_naissance=None, sexe=None, adversaires=None,
-                 total_points_tournoi=0):
+                 total_points_tournoi=0, id_joueur=0):
         """
         Initialise une instance de Joueur.
         :param nom_famille: nom du joueur
@@ -35,6 +35,7 @@ class Joueur:
         self.classement = classement
         self.total_points_tournoi = total_points_tournoi
         self.adversaires = adversaires
+        self.id_joueur = id_joueur
 
     def __str__(self):
         return f"----Joueur: {self.nom_famille} {self.prenom}----,\n" \
@@ -58,8 +59,9 @@ class Joueur:
         classement = joueur_sauve["Classement"]
         adversaires = joueur_sauve["Adversaires"]
         total_points_tournoi = joueur_sauve["Score"]
+        id_joueur = joueur_sauve['ID joueur']
         return Joueur(nom_famille, prenom, classement, date_naissance, sexe,
-                      adversaires, total_points_tournoi)
+                      adversaires, total_points_tournoi, id_joueur)
 
     def save(self):
         """
@@ -73,7 +75,8 @@ class Joueur:
                         'Sexe': self.sexe,
                         'Classement': self.classement,
                         'Adversaires': self.adversaires,
-                        'Score': self.total_points_tournoi}
+                        'Score': self.total_points_tournoi,
+                        'ID joueur': self.id_joueur}
         return joueur_sauve
 
     def ajout_db(self, infos_joueur):
@@ -96,6 +99,7 @@ class Joueur:
             print(f"Joueur ID: {player.doc_id} - {player['Nom']} "
                   f"{player['Prenom']} - Classement : {player['Classement']}")
 
+        id_joueur = None
         id_valide = False
         while not id_valide:
             id_joueur = input("Entrer l'ID à modifier: ")
@@ -105,6 +109,7 @@ class Joueur:
             else:
                 print("Entrez une ID de joueur existant")
 
+        classement = None
         classement_valide = False
         while not classement_valide:
             classement = input("Entrez nouveau classement: ")

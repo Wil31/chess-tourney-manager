@@ -2,7 +2,7 @@ import sys
 
 from controleurs import tournoi_controleur, joueur_controleur
 from vues import vue_principale
-from modeles import joueur
+from modeles import modele_joueur
 
 
 def choix_menu():
@@ -34,7 +34,7 @@ class MenuPrincipalControleur:
 
     def __init__(self):
         self.vues = vue_principale.MenuPrincipal()
-        self.modele_joueur = joueur.Joueur()
+        self.modele_joueur = modele_joueur.Joueur()
         self.controleur_actuel = None
 
     def __call__(self):
@@ -45,7 +45,8 @@ class MenuPrincipalControleur:
             self.controleur_actuel = tournoi_controleur.CreerTournoiControleur()
             self.aller_vers_creer_tournoi()
         if entree == '2':
-            # self.aller_vers_continuer_tournoi()
+            self.controleur_actuel = tournoi_controleur.LancerTournoiControleur()
+            self.aller_vers_lancer_tournoi()
             pass
         if entree == '3':
             self.controleur_actuel = joueur_controleur.CreerJoueurControleur()
@@ -66,8 +67,8 @@ class MenuPrincipalControleur:
     def aller_vers_creer_tournoi(self):
         return self.controleur_actuel()
 
-    # def aller_vers_continuer_tournoi(self):
-    #     return self.controleur_actuel()
+    def aller_vers_lancer_tournoi(self):
+        return self.controleur_actuel()
 
     def aller_vers_creer_joueur(self):
         return self.controleur_actuel()

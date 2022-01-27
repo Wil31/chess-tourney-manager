@@ -3,7 +3,8 @@ class Match:
     Représente un match d'échecs
     """
 
-    def __init__(self, joueur_1, joueur_2):
+    def __init__(self, joueur_1=None, joueur_2=None, resultat_joueur_1=None,
+                 resultat_joueur_2=None):
         """
         Initialise une instance de Match
         :param joueur_1: L'objet joueur 1
@@ -13,14 +14,14 @@ class Match:
         """
         self.joueur_1 = joueur_1
         self.joueur_2 = joueur_2
-        self.resultat_joueur_1 = None
-        self.resultat_joueur_2 = None
+        self.resultat_joueur_1 = resultat_joueur_1
+        self.resultat_joueur_2 = resultat_joueur_2
         self.liste_1 = []
         self.liste_2 = []
         self.resultat_match = None
 
     def __str__(self):
-        if self.resultat_match is not None:
+        if self.resultat_joueur_1 is not None and self.resultat_joueur_2 is not None:
             infos_match = f"Match: {self.joueur_1.nom_famille} " \
                           f"{self.joueur_1.prenom}" \
                           f" VS {self.joueur_2.nom_famille} " \

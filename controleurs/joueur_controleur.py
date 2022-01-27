@@ -1,5 +1,5 @@
 from controleurs import menu_controleur
-from modeles.joueur import JOUEUR_DB, Joueur
+from modeles import modele_joueur
 from vues import vue_principale
 from operator import attrgetter
 
@@ -22,7 +22,7 @@ class CreerJoueurControleur:
             menu_controleur.MenuPrincipalControleur()
 
     def __call__(self):
-        self.modele_joueur = Joueur()
+        self.modele_joueur = modele_joueur.Joueur()
         self.infos_joueur.append(self.ajout_nom())
         self.infos_joueur.append(self.ajout_prenom())
         self.infos_joueur.append(self.ajout_classement())
@@ -41,9 +41,11 @@ class CreerJoueurControleur:
         self.infos_joueur.append(self.ajout_classement())
         self.infos_joueur.append(self.ajout_anniversaire())
         self.infos_joueur.append(self.ajout_sexe())
-        objet_joueur = Joueur(self.infos_joueur[0], self.infos_joueur[1],
-                              self.infos_joueur[2], self.infos_joueur[3],
-                              self.infos_joueur[4])
+        objet_joueur = modele_joueur.Joueur(self.infos_joueur[0],
+                                            self.infos_joueur[1],
+                                            self.infos_joueur[2],
+                                            self.infos_joueur[3],
+                                            self.infos_joueur[4])
         print("==========================================================\n"
               "===============Nouveau joueur enregistré !================\n"
               "==========================================================\n"
@@ -128,30 +130,30 @@ class CreerJoueurControleur:
 
 class JoueurRapport:
     def __call__(self):
-        joueur_save = []
+        liste_joueurs = []
         self.menu_principal_controleur = \
             menu_controleur.MenuPrincipalControleur()
-        self.joueur_db = JOUEUR_DB
-        self.joueur = Joueur()
+        self.joueur_db = modele_joueur.JOUEUR_DB
+        self.joueur = modele_joueur.Joueur()
         if len(self.joueur_db) == 0:
             print("Aucun joueurs enregistrés !")
             self.menu_principal_controleur()
         self.affiche_joueur = vue_principale.AfficheJoueurRapport()
 
         for joueur in self.joueur_db:
-            joueur_save.append(self.joueur.creer_instance_joueur(joueur))
+            liste_joueurs.append(self.joueur.creer_instance_joueur(joueur))
 
         self.affiche_joueur()
         while True:
             entree = input("==> ")
             match entree:
                 case '1':
-                    joueur_save.sort(key=attrgetter('nom_famille'))
-                    self.affiche_joueur.par_alphabetique(joueur_save)
+                    liste_joueurs.sort(key=attrgetter('nom_famille'))
+                    self.affiche_joueur.par_alphabetique(liste_joueurs)
                     JoueurRapport.__call__(self)
                 case '2':
-                    joueur_save.sort(key=attrgetter('classement'))
-                    self.affiche_joueur.par_classement(joueur_save)
+                    liste_joueurs.sort(key=attrgetter('classement'))
+                    self.affiche_joueur.par_classement(liste_joueurs)
                     JoueurRapport.__call__(self)
                 case ('X' | 'x'):
                     self.menu_principal_controleur()

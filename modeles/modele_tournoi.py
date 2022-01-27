@@ -10,7 +10,7 @@ class Tournoi:
 
     def __init__(self, nom=None, lieu=None, date=None, controle_temps=None,
                  description=None, nombre_tours=None, nombre_joueurs=None,
-                 liste_joueurs=None, tournees=None):
+                 liste_joueurs=None, tournees=None, id_tournoi=None):
         """
         Initialise une instance de Tournoi.
         :param nom: nom du tournoi
@@ -41,18 +41,19 @@ class Tournoi:
         self.description = description
         self.nombre_tours = nombre_tours
         self.nombre_joueurs = nombre_joueurs
-        self.liste_joueurs = liste_joueurs
+        self.ids_joueurs = liste_joueurs
         self.tournees = tournees
+        self.id_tournoi = id_tournoi
 
     def __str__(self):
         return f"----Tournoi: {self.nom}----,\n" \
+               f"ID: {self.id_tournoi}\n" \
                f"Lieu: {self.lieu},\n" \
                f"Date: {self.date},\n" \
                f"Contrôle du temps: {self.controle_temps},\n" \
                f"Description: {self.description},\n" \
                f"Nombre de tours: {self.nombre_tours},\n" \
-               f"Nombre de joueurs: {len(self.liste_joueurs)},\n" \
-               f"Tour en cours: {len(self.tournees)}\n"
+               f"Nombre de joueurs: {len(self.ids_joueurs)},\n"
 
     def __repr__(self):
         return str(self)
@@ -71,8 +72,10 @@ class Tournoi:
         liste_joueurs = tournoi_sauve["Liste joueurs"]
         nombre_joueurs = tournoi_sauve['Nombre de joueurs']
         tournees = tournoi_sauve["Tours"]
+        id_tournoi = tournoi_sauve['ID Tournoi']
         return Tournoi(nom, lieu, date, controle_temps, description,
-                       nombre_tours, nombre_joueurs, liste_joueurs, tournees)
+                       nombre_tours, nombre_joueurs, liste_joueurs, tournees,
+                       id_tournoi)
 
     def save(self):
         """
@@ -83,20 +86,26 @@ class Tournoi:
                          'Nombre de tours': self.nombre_tours,
                          'Controle du temps': self.controle_temps,
                          'Description': self.description,
-                         'Tours': self.tournees,
                          'Nombre de joueurs': self.nombre_joueurs,
-                         'Liste joueurs': self.liste_joueurs}
+                         'Liste joueurs': self.ids_joueurs,
+                         'Tours': self.tournees}
         return tournoi_sauve
 
-    def ajout_db(self, tournoi_sauve):
-        TOURNOI_DB.insert(tournoi_sauve)
+    def ajout_db(self, infos_tournoi):
+        tournoi = Tournoi(infos_tournoi[0], infos_tournoi[1],
+                          infos_tournoi[2], infos_tournoi[3],
+                          infos_tournoi[4], infos_tournoi[5],
+                          infos_tournoi[6], infos_tournoi[7])
+        id_tournoi = TOURNOI_DB.insert(tournoi.save())
+        TOURNOI_DB.update({"ID Tournoi": id_tournoi}, doc_ids=[id_tournoi])
+
 
     def vainqueur_tournoi(self):
         """
         Retourne le vainqueur du tournoi, plusieurs si égalité des points.
         Si plusieurs: ils sont classés du moins bon ELO au meilleur.
         """
-        liste_joueurs = self.liste_joueurs
+        liste_joueurs = self.ids_joueurs
         liste_joueurs_tri = sorted(liste_joueurs,
                                    key=lambda joueur: joueur.classement)
         liste_joueurs_par_points = sorted(liste_joueurs_tri,

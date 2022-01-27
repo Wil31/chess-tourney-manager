@@ -1,3 +1,8 @@
+from datetime import datetime
+
+from modeles import modele_tournoi
+
+
 class TournoiRapports:
     """
     Classe pour l'affichage des rapports du tournoi
@@ -16,7 +21,7 @@ class TournoiRapports:
         print("==================PREPARATION TOUR==================")
         print(tour)
         print("==================INFOS JOUEURS==================")
-        for joueur in self.tournoi.liste_joueurs:
+        for joueur in self.tournoi.ids_joueurs:
             print(joueur)
         # Affiche les infos des matchs du tour 1
         for match in tour.liste_matchs:
@@ -53,11 +58,11 @@ class TournoiRapports:
               f"Contrôle du temps: {self.tournoi.controle_temps},\n"
               f"Description: {self.tournoi.description},\n"
               f"Nombre de tours: {self.tournoi.nombre_tours},\n"
-              f"Nombre de joueurs: {len(self.tournoi.liste_joueurs)},\n"
+              f"Nombre de joueurs: {len(self.tournoi.ids_joueurs)},\n"
               f"VAINQUEUR(S) DU TOURNOI: {vainqueur}")
 
     def details_resultats(self):
-        liste_joueurs = sorted(self.tournoi.liste_joueurs,
+        liste_joueurs = sorted(self.tournoi.ids_joueurs,
                                key=lambda joueur: joueur.classement)
         liste_joueurs_par_points = sorted(liste_joueurs,
                                           key=lambda
@@ -149,3 +154,40 @@ class AfficheJoueurRapport:
                   f"{joueur.sexe}")
         print("Appuyer sur une touche pour revenir")
         input()
+
+
+class AfficheTournoi:
+    """
+    Affiche les tournois existants non commencés dans la DB
+    :return True si un tournoi existe et n'est pas commencé
+    """
+
+    def __call__(self, *args, **kwargs):
+        tournoi_non_commence = False
+        tournoi_db = modele_tournoi.TOURNOI_DB
+        for tournoi in tournoi_db:
+            if not tournoi['Tours']:
+                print(f"ID Tournoi: {tournoi.doc_id}, Nom: "
+                      f"{tournoi['Nom du tournoi']}, Lieu: {tournoi['Lieu']}")
+                tournoi_non_commence = True
+        return tournoi_non_commence
+
+
+class AfficheTour:
+    def affiche_tour(self, tour_name, liste_matchs):
+        print(f"-------------{tour_name}---------------\n")
+        for match in liste_matchs:
+            print(match)
+            print()
+
+    def affiche_date_heure_tour(self):
+        print()
+        input("Appuyez sur une touche pour commencer le tour\n")
+        date_heure = datetime.now()
+        debut = date_heure.strftime("%H:%M:%S - %d/%m/%Y")
+        print(f"Début du tour : {debut}\n")
+        input("Appuyez sur une touche lorsque le tour est terminé\n")
+        date_heure = datetime.now()
+        fin = date_heure.strftime("%H:%M:%S - %d/%m/%Y")
+        print(f"Fin du tour : {fin}\n")
+        return debut, fin
