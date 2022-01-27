@@ -1,3 +1,8 @@
+from tinydb import TinyDB
+
+TOURNOI_DB = TinyDB('modeles/tournoi_db.json')
+
+
 class Tournoi:
     """
     Modèle de tournoi d'échecs
@@ -25,6 +30,8 @@ class Tournoi:
         :param liste_joueurs: liste des objets joueurs participants
         :type liste_joueurs: list [Joueur]
         """
+        if liste_joueurs is None:
+            liste_joueurs = []
         if tournees is None:
             tournees = []
         self.nom = nom
@@ -53,6 +60,7 @@ class Tournoi:
     def creer_instance_tournoi(self, tournoi_sauve):
         """
         Méthode d'instanciation de tournoi à partir de données texte
+        :type tournoi_sauve: dict
         """
         nom = tournoi_sauve['Nom du tournoi']
         lieu = tournoi_sauve['Lieu']
@@ -75,11 +83,13 @@ class Tournoi:
                          'Nombre de tours': self.nombre_tours,
                          'Controle du temps': self.controle_temps,
                          'Description': self.description,
-                         "Tours": self.tournees,
+                         'Tours': self.tournees,
                          'Nombre de joueurs': self.nombre_joueurs,
                          'Liste joueurs': self.liste_joueurs}
-
         return tournoi_sauve
+
+    def ajout_db(self, tournoi_sauve):
+        TOURNOI_DB.insert(tournoi_sauve)
 
     def vainqueur_tournoi(self):
         """

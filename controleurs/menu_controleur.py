@@ -1,7 +1,8 @@
 import sys
 
-from controleurs import tournoi_controleur
+from controleurs import tournoi_controleur, joueur_controleur
 from vues import vue_principale
+from modeles import joueur
 
 
 def choix_menu():
@@ -12,6 +13,12 @@ def choix_menu():
                 return '1'
             case '2':
                 return '2'
+            case '3':
+                return '3'
+            case '4':
+                return '4'
+            case '5':
+                return '5'
             case ('X' | 'x'):
                 return 'x'
             case '9':
@@ -27,6 +34,7 @@ class MenuPrincipalControleur:
 
     def __init__(self):
         self.vues = vue_principale.MenuPrincipal()
+        self.modele_joueur = joueur.Joueur()
         self.controleur_actuel = None
 
     def __call__(self):
@@ -39,6 +47,15 @@ class MenuPrincipalControleur:
         if entree == '2':
             # self.aller_vers_continuer_tournoi()
             pass
+        if entree == '3':
+            self.controleur_actuel = joueur_controleur.CreerJoueurControleur()
+            self.aller_vers_creer_joueur()
+        if entree == '4':
+            self.controleur_actuel = joueur_controleur.JoueurRapport()
+            self.aller_vers_rapport_joueur()
+        if entree == '5':
+            self.controleur_actuel = self.modele_joueur.modifier_classement_joueur()
+            self.aller_vers_modifier_classement_joueur()
         if entree == 'x':
             self.controleur_actuel = FermerApplication()
             self.aller_vers_fermer_application()
@@ -51,6 +68,15 @@ class MenuPrincipalControleur:
 
     # def aller_vers_continuer_tournoi(self):
     #     return self.controleur_actuel()
+
+    def aller_vers_creer_joueur(self):
+        return self.controleur_actuel()
+
+    def aller_vers_rapport_joueur(self):
+        return self.controleur_actuel()
+
+    def aller_vers_modifier_classement_joueur(self):
+        return self.controleur_actuel()
 
     def aller_vers_fermer_application(self):
         return self.controleur_actuel()

@@ -1,5 +1,7 @@
 from controleurs import menu_controleur
-from modeles.joueur import Joueur
+from modeles.joueur import JOUEUR_DB, Joueur
+from vues import vue_principale
+from operator import attrgetter
 
 
 class RapportJoueurs:
@@ -15,8 +17,20 @@ class CreerJoueurControleur:
     """
 
     def __init__(self):
-        self.menu_principal_controleur = menu_controleur.MenuPrincipalControleur()
         self.infos_joueur = []
+        self.menu_principal_controleur = \
+            menu_controleur.MenuPrincipalControleur()
+
+    def __call__(self):
+        self.modele_joueur = Joueur()
+        self.infos_joueur.append(self.ajout_nom())
+        self.infos_joueur.append(self.ajout_prenom())
+        self.infos_joueur.append(self.ajout_classement())
+        self.infos_joueur.append(self.ajout_anniversaire())
+        self.infos_joueur.append(self.ajout_sexe())
+        self.modele_joueur.ajout_db(self.infos_joueur)
+        self.infos_joueur.clear()
+        self.menu_principal_controleur()
 
     def creer_obj_joueur(self):
         """
@@ -107,6 +121,39 @@ class CreerJoueurControleur:
         while True:
             classement = input("Entrez l'ELO du joueur: ")
             if classement.isdigit() and (1000 < int(classement) < 3000):
-                return classement
+                return int(classement)
             else:
                 print("Entrez un ELO entre 1000 et 3000!")
+
+
+class JoueurRapport:
+    def __call__(self):
+        joueur_save = []
+        self.menu_principal_controleur = \
+            menu_controleur.MenuPrincipalControleur()
+        self.joueur_db = JOUEUR_DB
+        self.joueur = Joueur()
+        if len(self.joueur_db) == 0:
+            print("Aucun joueurs enregistrés !")
+            self.menu_principal_controleur()
+        self.affiche_joueur = vue_principale.AfficheJoueurRapport()
+
+        for joueur in self.joueur_db:
+            joueur_save.append(self.joueur.creer_instance_joueur(joueur))
+
+        self.affiche_joueur()
+        while True:
+            entree = input("==> ")
+            match entree:
+                case '1':
+                    joueur_save.sort(key=attrgetter('nom_famille'))
+                    self.affiche_joueur.par_alphabetique(joueur_save)
+                    JoueurRapport.__call__(self)
+                case '2':
+                    joueur_save.sort(key=attrgetter('classement'))
+                    self.affiche_joueur.par_classement(joueur_save)
+                    JoueurRapport.__call__(self)
+                case ('X' | 'x'):
+                    self.menu_principal_controleur()
+                case _:
+                    print("Entrée non valide")

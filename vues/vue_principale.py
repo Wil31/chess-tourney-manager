@@ -1,4 +1,4 @@
-class Rapports:
+class TournoiRapports:
     """
     Classe pour l'affichage des rapports du tournoi
     """
@@ -86,6 +86,9 @@ class MenuPrincipal:
               "-- Choisir une option: --------------------------\n"
               "1) Nouveau tournoi ------------------------------\n"
               "2) Reprendre un tournoi -------------------------\n"
+              "3) Créer un joueur ------------------------------\n"
+              "4) Liste des joueurs ----------------------------\n"
+              "5) Modifier classement joueur -------------------\n"
               "-------------------------------------------------\n"
               "x) Quitter --------------------------------------\n"
               "-------------------------------------------------\n"
@@ -103,6 +106,46 @@ class MenuPrincipal:
               "1) Voir résumé et vainqueur(s) du tournoi -------\n"
               "2) Voir le détail des joueurs -------------------\n"
               "-------------------------------------------------\n"
-              "x) Quitter --------------------------------------\n"
+              "x) Retour menu ----------------------------------\n"
               "-------------------------------------------------\n"
               "")
+
+    def menu_fin_modif_classement(self):
+        print("-------------------------------------------------\n"
+              "-- Choisir une option: --------------------------\n"
+              "1) Modifier un autre joueur ---------------------\n"
+              "-------------------------------------------------\n"
+              "x) Retour menu ----------------------------------\n"
+              "-------------------------------------------------\n"
+              "")
+
+
+class AfficheJoueurRapport:
+    def __call__(self):
+        print("-------------------------------------------------\n"
+              "------------------INFOS JOUEURS------------------\n"
+              "-------------------------------------------------\n"
+              "-- Choisir une option: --------------------------\n"
+              "1) Joueurs par ordre alphabétique ---------------\n"
+              "2) Joueurs par classement -----------------------\n"
+              "-------------------------------------------------\n"
+              "x) Retour menu ----------------------------------\n"
+              )
+
+    def par_alphabetique(self, liste_joueurs):
+        for joueur in liste_joueurs:
+            print(
+                f"Nom --- Prénom --- Date de naissance\n"
+                f"{joueur.nom_famille} {joueur.prenom} "
+                f"{joueur.date_naissance}\n"
+                f"Sexe: {joueur.sexe} - Classement : {joueur.classement}")
+        print("Appuyer sur une touche pour revenir")
+        input()
+
+    def par_classement(self, liste_joueurs):
+        for joueur in liste_joueurs:
+            print(f"Classement :{joueur.classement} - {joueur.nom_famille}"
+                  f" {joueur.prenom} - {joueur.date_naissance} - "
+                  f"{joueur.sexe}")
+        print("Appuyer sur une touche pour revenir")
+        input()
