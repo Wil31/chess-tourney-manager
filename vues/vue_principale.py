@@ -1,6 +1,7 @@
 from datetime import datetime
 
-from modeles import modele_tournoi
+from modeles import modele_tournoi, modele_joueur
+from controleurs import menu_controleur
 
 
 class TournoiRapports:
@@ -44,7 +45,7 @@ class TournoiRapports:
         """
         :type tour: object Tour
         """
-        print(f"\n========RESULTATS {tour.nom}========")
+        print(f"\n========RESULTATS {tour.nom_tour}========")
         for match in tour.liste_matchs:
             print(match)
             print("       --------------------------")
@@ -52,7 +53,7 @@ class TournoiRapports:
 
     def resulats_tournoi(self):
         vainqueur = self.tournoi.vainqueur_tournoi()
-        print(f"\n========RESULTATS {self.tournoi.nom}========"
+        print(f"\n========RESULTATS {self.tournoi.nom_tour}========"
               f"Lieu: {self.tournoi.lieu},\n"
               f"Date: {self.tournoi.date},\n"
               f"Contrôle du temps: {self.tournoi.controle_temps},\n"
@@ -178,16 +179,55 @@ class AfficheTour:
         print(f"-------------{tour_name}---------------\n")
         for match in liste_matchs:
             print(match)
-            print()
 
     def affiche_date_heure_tour(self):
-        print()
-        input("Appuyez sur une touche pour commencer le tour\n")
+        print("Appuyez sur Y pour commencer le tour")
+        while True:
+            entree = input('==> ')
+            if entree.upper() == 'Y':
+                break
+            else:
+                print("Appuyez sur Y pour commencer le tour")
         date_heure = datetime.now()
         debut = date_heure.strftime("%H:%M:%S - %d/%m/%Y")
         print(f"Début du tour : {debut}\n")
-        input("Appuyez sur une touche lorsque le tour est terminé\n")
+
+        print("Appuyez sur Y lorsque le tour est terminé")
+        while True:
+            entree = input('==> ')
+            if entree.upper() == 'Y':
+                break
+            else:
+                print("Appuyez sur Y lorsque le tour est terminé")
         date_heure = datetime.now()
         fin = date_heure.strftime("%H:%M:%S - %d/%m/%Y")
         print(f"Fin du tour : {fin}\n")
         return debut, fin
+
+
+class ResultatsTournoi:
+    def __call__(self, tournoi_obj):
+        print("-------------------------------------------------\n"
+              "-------------- RESULTATS TOURNOI ----------------\n"
+              "-------------------------------------------------\n")
+        for tour in tournoi_obj.tournees:
+            print(tour)
+            print()
+
+            for match in tour.liste_matchs_termines:
+                joueur_1 = modele_joueur.JOUEUR_DB.get(doc_id=match[0][0])
+                score_joueur_1 = match[0][1]
+                joueur_2 = modele_joueur.JOUEUR_DB.get(doc_id=match[1][0])
+                score_joueur_2 = match[1][1]
+                print(f"{joueur_1['Nom']} {joueur_1['Prenom']} VS "
+                      f"{joueur_2['Nom']} {joueur_2['Prenom']}\n"
+                      f"RESULTAT: {score_joueur_1} -_-_- {score_joueur_2}")
+
+        print("Appuyez sur X pour revenir au menu\n")
+        choix_valide = False
+        while not choix_valide:
+            choix = input("==> ")
+            if choix.upper() == 'X':
+                choix_valide = True
+            else:
+                print("Entrée invalide (Y/N)")

@@ -3,8 +3,8 @@ class Match:
     Représente un match d'échecs
     """
 
-    def __init__(self, joueur_1=None, joueur_2=None, resultat_joueur_1=None,
-                 resultat_joueur_2=None):
+    def __init__(self, nom_match=None, joueur_1=None, joueur_2=None,
+                 resultat_joueur_1=None, resultat_joueur_2=None):
         """
         Initialise une instance de Match
         :param joueur_1: L'objet joueur 1
@@ -12,6 +12,7 @@ class Match:
         :param joueur_2: L'objet joueur 2
         :type joueur_2: obj [Joueur]
         """
+        self.nom_match = nom_match
         self.joueur_1 = joueur_1
         self.joueur_2 = joueur_2
         self.resultat_joueur_1 = resultat_joueur_1
@@ -38,9 +39,9 @@ class Match:
                 case 0.5:
                     return infos_match + "MATCH NUL"
         else:
-            return f"Match à jouer: {self.joueur_1.nom_famille} " \
-                   f"{self.joueur_1.prenom}" \
-                   f" VS {self.joueur_2.nom_famille} {self.joueur_2.prenom}"
+            return f"Match à jouer: {self.joueur_1.nom_famille}" \
+                   f" {self.joueur_1.prenom} " \
+                   f"VS {self.joueur_2.nom_famille} {self.joueur_2.prenom}"
 
     def __repr__(self):
         return str(self)

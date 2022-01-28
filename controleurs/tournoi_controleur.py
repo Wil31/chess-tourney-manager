@@ -12,6 +12,7 @@ class LancerTournoiControleur:
     """
 
     MATCHS_JOUES = []
+    TOURS_JOUES = []
 
     def __init__(self):
         """
@@ -20,48 +21,61 @@ class LancerTournoiControleur:
         self.affiche_tournoi = None
         self.tournoi = None
         self.tour = modele_tour.Tour()
+        self.liste_joueurs_trie = []
         self.menu_principal_controleur = \
             menu_controleur.MenuPrincipalControleur()
+        self.vue_resultats = vue_principale.ResultatsTournoi()
         # self.tournoi_rapports = vue_principale.TournoiRapports(
         #     self.tournoi_obj)
 
     def __call__(self):
         self.tournoi_obj = self.selection_tournoi()
         self.liste_joueurs_trie = self.triage_initial(self.tournoi_obj)
-
         # for joueur in self.tournoi_actuel.liste_joueurs:
         #     joueur.reset_adversaires()
 
         self.tournoi_obj.tournees.append(
-            self.tour.lancement_tour(self.liste_joueurs_trie,
-                                     self.tournoi_obj))
+            self.tour.lancer_tour(self.liste_joueurs_trie, self.tournoi_obj))
+        self.sauvegarde_tournoi(self.tournoi_obj)
 
-        premier_tour.generer_paires_initial(self.tournoi_obj)
-        self.tournoi_rapports.preparation_premier_tour(premier_tour)
-        premier_tour.lancement_tour()
+        for tour in range(int(self.tournoi_obj.nombre_tours) - 1):
+            self.liste_joueurs_trie.clear()
+            self.liste_joueurs_trie = self.triage_tours_suivants(
+                self.tournoi_obj)
+            self.tournoi_obj.tournees.append(
+                self.tour.lancer_tour(self.liste_joueurs_trie,
+                                      self.tournoi_obj))
+            self.sauvegarde_tournoi(self.tournoi_obj)
 
-        entree_valide = False
-        while not entree_valide:
-            entree = input("Appuyez sur Y pour entrer les résultats ==> ")
-            if entree == "Y" or entree == 'y':
-                entree_valide = True
-                premier_tour.fin_tour()
-                self.entrer_resultats_matchs(premier_tour)
+        self.vue_resultats(self.tournoi_obj)
+        self.menu_principal_controleur()
+
+    def sauvegarde_tournoi(self, tournoi_obj):
+
+        tournoi_db = modele_tournoi.TOURNOI_DB
+        table_tours = tournoi_db.table('tours')
+
+        tour_obj = tournoi_obj.tournees[-1]
+        tour_serialise = tour_obj.serialise()
+        tour_serialise['Liste matchs'] = tour_obj.liste_matchs_termines
+
+        id_tour = table_tours.insert(tour_serialise)
+        LancerTournoiControleur.TOURS_JOUES.append(id_tour)
+        tournoi_db.update({'Tours': LancerTournoiControleur.TOURS_JOUES},
+                          doc_ids=[tournoi_obj.id_tournoi])
+
+        print("Tournoi sauvegardé, voulez-vous quitter?\n")
+        choix_valide = False
+        while not choix_valide:
+            choix = input("Y/N ==> ")
+            if choix.upper() == 'Y':
+                choix_valide = True
+                self.menu_principal_controleur()
+            elif choix.upper() == 'N':
+                choix_valide = True
+                break
             else:
-                continue
-        self.tournoi_rapports.resultats_tour(premier_tour)
-        # if int(self.tournoi_actuel.nombre_tours) > 1:
-        #     self.tours_suivants()
-        #
-        # while True:
-        #     self.vues.menu_fin_tournoi()
-        #     entree = input("==> ")
-        #     if entree == '1':
-        #         self.tournoi_rapports.resulats_tournoi()
-        #     if entree == '2':
-        #         self.tournoi_rapports.details_resultats()
-        #     if entree in ('X', 'x'):
-        #         self.menu_principal_controleur()
+                print("Entrée invalide (Y/N)")
 
     def selection_tournoi(self):
         self.affiche_tournoi = vue_principale.AfficheTournoi()
@@ -93,18 +107,25 @@ class LancerTournoiControleur:
         :return: liste des joueurs triée
         :rtype: list
         """
+        self.joueur = modele_joueur.Joueur()
         ids_joueurs = tournoi.ids_joueurs
         liste_joueurs = []
+
         for id_joueur in ids_joueurs:
             joueur = modele_joueur.JOUEUR_DB.get(doc_id=id_joueur)
+            joueur = self.joueur.creer_instance_joueur(joueur)
             liste_joueurs.append(joueur)
-        liste_joueurs.sort(key=itemgetter('Classement'), reverse=True)
+
+        liste_joueurs = sorted(liste_joueurs,
+                               key=lambda joueur: joueur.classement,
+                               reverse=True)
         return liste_joueurs
 
     def triage_initial(self, tournoi_obj):
         """
         Méthode pour générer la liste des joueurs trié du premier tour
         """
+
         liste_joueurs = self.trier_joueurs_classement(tournoi_obj)
         nombre_joueurs = len(liste_joueurs)
         liste_joueurs_sup = liste_joueurs[:int(nombre_joueurs / 2)]
@@ -143,15 +164,16 @@ class LancerTournoiControleur:
         """
         Méthode pour trier les joueurs par points (par classement si égalité)
         """
-        liste_joueurs_tmp = self.trier_joueurs_classement(tournoi)
-        liste_joueurs_tri = sorted(liste_joueurs_tmp, key=lambda
+        liste_joueurs_classe = self.trier_joueurs_classement(tournoi)
+        liste_joueurs_tri = sorted(liste_joueurs_classe, key=lambda
             joueur: joueur.total_points_tournoi, reverse=True)
         return liste_joueurs_tri
 
-    def generer_paires(self, tournoi):
+    def triage_tours_suivants(self, tournoi):
         """
         Méthode pour générer les paires (matchs) des tours suivants
         """
+        liste_joueurs_par_points = []
         queue = deque(self.trier_joueurs_points(tournoi))
         while len(queue) > 1:
             joueur_1 = queue.popleft()
@@ -168,8 +190,11 @@ class LancerTournoiControleur:
                     else:
                         continue
 
-            match = modele_match.Match(joueur_1, joueur_2)
-            self.liste_matchs.append(match)
+            liste_joueurs_par_points.append(joueur_1)
+            liste_joueurs_par_points.append(joueur_2)
+            self.MATCHS_JOUES.append({joueur_1.id_joueur, joueur_2.id_joueur})
+
+        return liste_joueurs_par_points
 
     def entrer_resultats_matchs(self, tour):
         """
@@ -235,7 +260,6 @@ class CreerTournoiControleur:
                 entree_valide = True
                 self.ajout_joueurs()
                 self.infos_tournoi.append(self.liste_id_joueurs)
-        # self.objet_tournoi = self.creer_obj_tournoi(self.infos_tournoi)
         self.tournoi.ajout_db(self.infos_tournoi)
         print("==========================================================\n"
               "==================Nouveau tournoi créé !==================\n"

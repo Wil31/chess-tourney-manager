@@ -63,7 +63,7 @@ class Joueur:
         return Joueur(nom_famille, prenom, classement, date_naissance, sexe,
                       adversaires, total_points_tournoi, id_joueur)
 
-    def save(self):
+    def serialise(self):
         """
         Méthode de sérialisation du modèle joueur
         :return:
@@ -83,7 +83,7 @@ class Joueur:
         joueur = Joueur(infos_joueur[0], infos_joueur[1],
                         infos_joueur[2], infos_joueur[3],
                         infos_joueur[4])
-        id_joueur = JOUEUR_DB.insert(joueur.save())
+        id_joueur = JOUEUR_DB.insert(joueur.serialise())
         JOUEUR_DB.update({'ID joueur': id_joueur}, doc_ids=[id_joueur])
 
     def modifier_classement_joueur(self):

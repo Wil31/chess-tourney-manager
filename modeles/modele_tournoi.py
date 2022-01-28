@@ -77,28 +77,27 @@ class Tournoi:
                        nombre_tours, nombre_joueurs, liste_joueurs, tournees,
                        id_tournoi)
 
-    def save(self):
+    def serialise(self):
         """
         Méthode de sérialisation du modèle tournoi
         """
-        tournoi_sauve = {'Nom du tournoi': self.nom, 'Lieu': self.lieu,
-                         'Date': self.date,
-                         'Nombre de tours': self.nombre_tours,
-                         'Controle du temps': self.controle_temps,
-                         'Description': self.description,
-                         'Nombre de joueurs': self.nombre_joueurs,
-                         'Liste joueurs': self.ids_joueurs,
-                         'Tours': self.tournees}
-        return tournoi_sauve
+        tournoi_serialise = {'Nom du tournoi': self.nom, 'Lieu': self.lieu,
+                             'Date': self.date,
+                             'Nombre de tours': self.nombre_tours,
+                             'Controle du temps': self.controle_temps,
+                             'Description': self.description,
+                             'Nombre de joueurs': self.nombre_joueurs,
+                             'Liste joueurs': self.ids_joueurs,
+                             'Tours': self.tournees}
+        return tournoi_serialise
 
     def ajout_db(self, infos_tournoi):
         tournoi = Tournoi(infos_tournoi[0], infos_tournoi[1],
                           infos_tournoi[2], infos_tournoi[3],
                           infos_tournoi[4], infos_tournoi[5],
                           infos_tournoi[6], infos_tournoi[7])
-        id_tournoi = TOURNOI_DB.insert(tournoi.save())
+        id_tournoi = TOURNOI_DB.insert(tournoi.serialise())
         TOURNOI_DB.update({"ID Tournoi": id_tournoi}, doc_ids=[id_tournoi])
-
 
     def vainqueur_tournoi(self):
         """
