@@ -4,16 +4,9 @@ from vues import vue_principale
 from operator import attrgetter
 
 
-class RapportJoueurs:
-    """
-    Affiche la liste des joueurs enregistrés.
-    Trie par ordre alphabétique ou par classement.
-    """
-
-
 class CreerJoueurControleur:
     """
-    Créé un nouveau joueur
+    Crée un nouveau joueur et l'enregistre dans la BD joueur
     """
 
     def __init__(self):
@@ -31,26 +24,6 @@ class CreerJoueurControleur:
         self.modele_joueur.ajout_db(self.infos_joueur)
         self.infos_joueur.clear()
         self.menu_principal_controleur()
-
-    def creer_obj_joueur(self):
-        """
-        Créé puis retourne un objet joueur
-        """
-        self.infos_joueur.append(self.ajout_nom())
-        self.infos_joueur.append(self.ajout_prenom())
-        self.infos_joueur.append(self.ajout_classement())
-        self.infos_joueur.append(self.ajout_anniversaire())
-        self.infos_joueur.append(self.ajout_sexe())
-        objet_joueur = modele_joueur.Joueur(self.infos_joueur[0],
-                                            self.infos_joueur[1],
-                                            self.infos_joueur[2],
-                                            self.infos_joueur[3],
-                                            self.infos_joueur[4])
-        print("==========================================================\n"
-              "===============Nouveau joueur enregistré !================\n"
-              "==========================================================\n"
-              "")
-        return objet_joueur
 
     def ajout_nom(self):
         nom_joueur = None
@@ -129,6 +102,11 @@ class CreerJoueurControleur:
 
 
 class JoueurRapport:
+    """
+    Affiche la liste des joueurs enregistrés.
+    Trie par ordre alphabétique ou par classement.
+    """
+
     def __call__(self):
         liste_joueurs = []
         self.menu_principal_controleur = \

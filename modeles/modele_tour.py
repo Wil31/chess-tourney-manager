@@ -1,4 +1,3 @@
-from datetime import datetime
 from vues import vue_principale
 from modeles import modele_match
 
@@ -9,34 +8,28 @@ class Tour:
     """
 
     def __init__(self, nom_tour=None, date_debut=None, date_fin=None,
-                 liste_matchs=None, liste_matchs_termines=None):
+                 liste_matchs_termines=None):
         """
         Initialise une instance de Tour.
         :param nom_tour: nom du tour
         :type nom_tour: str
-        :param date_debut: date de début du tour
+        :param date_debut: date et heure de début du tour
         :type date_debut: str
-        :param heure_debut: heure de début du tour
-        :type heure_debut: str
-        :param tournoi: le tournoi dont fait partit le tour
-        :type tournoi: object Tournoi
+        :param date_fin: date et heure de fin du tour
+        :type date_fin: str
+        :param liste_matchs_termines: liste des matchs terminés du tour
+        :type liste_matchs_termines: list
         """
-        self.liste_matchs_termines = liste_matchs_termines
-        if liste_matchs is None:
-            liste_matchs = []
         self.nom_tour = nom_tour
         self.date_debut = date_debut
         self.date_fin = date_fin
-        self.liste_matchs = liste_matchs
+        self.liste_matchs_termines = liste_matchs_termines
+        self.liste_tours = []
 
     def __str__(self):
-        if self.date_debut is not None:
-            return f"----Tour: {self.nom_tour}----,\n" \
-                   f"Date de début: {self.date_debut},\n" \
-                   f"Nombre de matchs: {len(self.liste_matchs)}\n"
-        else:
-            return f"----Tour: {self.nom_tour}----,\n" \
-                   f"Nombre de matchs: {len(self.liste_matchs)}\n"
+        return f"----Tour: {self.nom_tour}----,\n" \
+               f"Date de début: {self.date_debut},\n" \
+               f"Date de fin: {self.date_fin}\n"
 
     def __repr__(self):
         return str(self)
@@ -49,8 +42,8 @@ class Tour:
         nom = tour_sauve['Nom']
         date_debut = tour_sauve['Debut']
         date_fin = tour_sauve['Fin']
-        liste_matchs = tour_sauve['Liste matchs']
-        return Tour(nom, date_debut, date_fin, liste_matchs)
+        liste_matchs_termines = tour_sauve['Liste matchs termines']
+        return Tour(nom, date_debut, date_fin, liste_matchs_termines)
 
     def serialise(self):
         """
@@ -59,27 +52,31 @@ class Tour:
         tour_serialise = {'Nom': self.nom_tour,
                           'Debut': self.date_debut,
                           'Fin': self.date_fin,
-                          'Liste matchs': self.liste_matchs}
+                          'Liste matchs termines': self.liste_matchs_termines}
         return tour_serialise
 
-    def lancer_tour(self, liste_joueurs_trie, tournoi_obj):
+    def lancer_tour(self, liste_joueurs_trie_autre, tournoi_obj):
         """
-        Méthode pour lancer le tour et enregistrer la date et l'heure de début
+        Méthode de contrôle du tour avec entrée des résultats de matchs
         """
-        self.nom_tour = f"Tour {len(tournoi_obj.tournees) + 1}"
+        self.nom_tour = f"Tour {len(tournoi_obj.liste_tours) + 1}"
         self.vue = vue_principale.AfficheTour()
+        self.liste_tours = []
+        self.liste_matchs_termines = []
+        liste_joueurs_trie = liste_joueurs_trie_autre.copy()
 
         while len(liste_joueurs_trie) > 0:
             match = modele_match.Match(self.nom_tour, liste_joueurs_trie[0],
                                        liste_joueurs_trie[1])
-            self.liste_matchs.append(match)
+            modele_match.Match.NUMERO_MATCH += 1
+            self.liste_tours.append(match)
             del liste_joueurs_trie[0:2]
 
-        self.vue.affiche_tour(self.nom_tour, self.liste_matchs)
+        self.vue.affiche_tour(self.nom_tour, self.liste_tours)
 
         self.date_debut, self.date_fin = self.vue.affiche_date_heure_tour()
 
-        for match in self.liste_matchs:
+        for match in self.liste_tours:
             resultat_valide = False
             while not resultat_valide:
                 resultat_joueur_1 = input(
@@ -111,12 +108,3 @@ class Tour:
 
         return Tour(self.nom_tour, self.date_debut, self.date_fin,
                     self.liste_matchs_termines)
-
-    def fin_tour(self):
-        """
-        Méthode pour finir le tour et enregistrer la date et l'heure de début
-        """
-        date_heure = datetime.now()
-        self.date_fin = date_heure.strftime("%H:%M:%S - %d/%m/%Y")
-        print("\n=== Fin du tour===\n"
-              f"DATE: {self.date_fin}\n")

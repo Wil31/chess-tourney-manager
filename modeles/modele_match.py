@@ -2,24 +2,28 @@ class Match:
     """
     Représente un match d'échecs
     """
+    NUMERO_MATCH = 1
 
     def __init__(self, nom_match=None, joueur_1=None, joueur_2=None,
                  resultat_joueur_1=None, resultat_joueur_2=None):
         """
         Initialise une instance de Match
+        :param nom_match: nom du match
+        :type nom_match: str
         :param joueur_1: L'objet joueur 1
         :type joueur_1: obj [Joueur]
         :param joueur_2: L'objet joueur 2
         :type joueur_2: obj [Joueur]
+        :param resultat_joueur_1: résultat du joueur 1
+        :type resultat_joueur_1: int
+        :param resultat_joueur_2: résultat du joueur 2
+        :type resultat_joueur_2: int
         """
         self.nom_match = nom_match
         self.joueur_1 = joueur_1
         self.joueur_2 = joueur_2
         self.resultat_joueur_1 = resultat_joueur_1
         self.resultat_joueur_2 = resultat_joueur_2
-        self.liste_1 = []
-        self.liste_2 = []
-        self.resultat_match = None
 
     def __str__(self):
         if self.resultat_joueur_1 is not None and self.resultat_joueur_2 is not None:
@@ -45,25 +49,3 @@ class Match:
 
     def __repr__(self):
         return str(self)
-
-    def ajouter_resultats_match(self, resultat_joueur_1, resultat_joueur_2):
-        """
-        Méthode pour ajouter les résultats d'un match
-        :param resultat_joueur_1: défaite: 0, nul: 0.5 ou victoire: 1
-        :type resultat_joueur_1: float
-        :param resultat_joueur_2:défaite: 0, nul: 0.5 ou victoire: 1
-        :type resultat_joueur_2: float
-        """
-        self.resultat_joueur_1 = resultat_joueur_1
-        self.joueur_1.total_points_tournoi += resultat_joueur_1
-        self.resultat_joueur_2 = resultat_joueur_2
-        self.joueur_2.total_points_tournoi += resultat_joueur_2
-        self.liste_1 = [self.joueur_1, self.resultat_joueur_1]
-        self.liste_2 = [self.joueur_2, self.resultat_joueur_2]
-        self.resultat_match = (self.liste_1, self.liste_2)
-
-        self.ajouter_adversaires_joueurs()
-
-    def ajouter_adversaires_joueurs(self):
-        self.joueur_1.adversaires.append(self.joueur_2)
-        self.joueur_2.adversaires.append(self.joueur_1)

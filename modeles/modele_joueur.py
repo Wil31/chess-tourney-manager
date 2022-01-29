@@ -11,7 +11,7 @@ class Joueur:
     """
 
     def __init__(self, nom_famille=None, prenom=None, classement=None,
-                 date_naissance=None, sexe=None, adversaires=None,
+                 date_naissance=None, sexe=None,
                  total_points_tournoi=0, id_joueur=0):
         """
         Initialise une instance de Joueur.
@@ -25,27 +25,24 @@ class Joueur:
         :type sexe: str
         :param classement: nombre positif
         :type classement: int
+        :param total_points_tournoi: score total du joueur
+        :type total_points_tournoi: int
+        :param id_joueur: ID du joueur
+        :type id_joueur: int
         """
-        if adversaires is None:
-            adversaires = []
         self.nom_famille = nom_famille
         self.prenom = prenom
         self.date_naissance = date_naissance
         self.sexe = sexe
         self.classement = classement
         self.total_points_tournoi = total_points_tournoi
-        self.adversaires = adversaires
         self.id_joueur = id_joueur
 
     def __str__(self):
-        return f"----Joueur: {self.nom_famille} {self.prenom}----,\n" \
-               f"Date de naissance: {self.date_naissance},\n" \
-               f"Sexe: {self.sexe},\n" \
-               f"Classement: {self.classement},\n" \
-               f"Total points: {self.total_points_tournoi}\n"
+        return f"{self.nom_famille} {self.prenom}"
 
     def __repr__(self):
-        return str(self)
+        return f"{self.nom_famille} {self.prenom}, Classé : {self.classement}"
 
     def creer_instance_joueur(self, joueur_sauve):
         """
@@ -57,11 +54,10 @@ class Joueur:
         date_naissance = joueur_sauve["Date de naissance"]
         sexe = joueur_sauve["Sexe"]
         classement = joueur_sauve["Classement"]
-        adversaires = joueur_sauve["Adversaires"]
         total_points_tournoi = joueur_sauve["Score"]
         id_joueur = joueur_sauve['ID joueur']
         return Joueur(nom_famille, prenom, classement, date_naissance, sexe,
-                      adversaires, total_points_tournoi, id_joueur)
+                      total_points_tournoi, id_joueur)
 
     def serialise(self):
         """
@@ -74,12 +70,16 @@ class Joueur:
                         'Date de naissance': self.date_naissance,
                         'Sexe': self.sexe,
                         'Classement': self.classement,
-                        'Adversaires': self.adversaires,
                         'Score': self.total_points_tournoi,
                         'ID joueur': self.id_joueur}
         return joueur_sauve
 
     def ajout_db(self, infos_joueur):
+        """
+        Méthode d'ajout d'un joueur à la DB joueur
+        :param infos_joueur: liste des informations du joueur
+        :type infos_joueur: list
+        """
         joueur = Joueur(infos_joueur[0], infos_joueur[1],
                         infos_joueur[2], infos_joueur[3],
                         infos_joueur[4])
@@ -88,7 +88,7 @@ class Joueur:
 
     def modifier_classement_joueur(self):
         """
-        Méthode pour modifier le classement d'un joueur
+        Méthode pour modifier le classement d'un joueur de la BD joueur
         """
         joueur_db = JOUEUR_DB
         self.menu_principal_controleur = \
@@ -134,6 +134,3 @@ class Joueur:
                     self.menu_principal_controleur()
                 case _:
                     print("Entrée non valide")
-
-    def reset_adversaires(self):
-        self.adversaires.clear()

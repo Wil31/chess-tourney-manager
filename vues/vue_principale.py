@@ -1,80 +1,7 @@
 from datetime import datetime
+from operator import attrgetter
 
-from modeles import modele_tournoi, modele_joueur
-from controleurs import menu_controleur
-
-
-class TournoiRapports:
-    """
-    Classe pour l'affichage des rapports du tournoi
-    """
-
-    def __init__(self, tournoi):
-        """
-        :type tournoi: object Tournoi
-        """
-        self.tournoi = tournoi
-
-    def preparation_premier_tour(self, tour):
-        """
-        :type tour: object Tour
-        """
-        print("==================PREPARATION TOUR==================")
-        print(tour)
-        print("==================INFOS JOUEURS==================")
-        for joueur in self.tournoi.ids_joueurs:
-            print(joueur)
-        # Affiche les infos des matchs du tour 1
-        for match in tour.liste_matchs:
-            print(match)
-            print("   ------------------------------------")
-
-    def preparation_tour(self, tour):
-        """
-        :type tour: object Tour
-        """
-        print("\n==================PREPARATION TOUR==================")
-        print(tour)
-        # Affiche les infos des matchs du tour
-        for match in tour.liste_matchs:
-            print(match)
-            print("       --------------------------")
-        print()
-
-    def resultats_tour(self, tour):
-        """
-        :type tour: object Tour
-        """
-        print(f"\n========RESULTATS {tour.nom_tour}========")
-        for match in tour.liste_matchs:
-            print(match)
-            print("       --------------------------")
-        print()
-
-    def resulats_tournoi(self):
-        vainqueur = self.tournoi.vainqueur_tournoi()
-        print(f"\n========RESULTATS {self.tournoi.nom_tour}========"
-              f"Lieu: {self.tournoi.lieu},\n"
-              f"Date: {self.tournoi.date},\n"
-              f"Contrôle du temps: {self.tournoi.controle_temps},\n"
-              f"Description: {self.tournoi.description},\n"
-              f"Nombre de tours: {self.tournoi.nombre_tours},\n"
-              f"Nombre de joueurs: {len(self.tournoi.ids_joueurs)},\n"
-              f"VAINQUEUR(S) DU TOURNOI: {vainqueur}")
-
-    def details_resultats(self):
-        liste_joueurs = sorted(self.tournoi.ids_joueurs,
-                               key=lambda joueur: joueur.classement)
-        liste_joueurs_par_points = sorted(liste_joueurs,
-                                          key=lambda
-                                              joueur:
-                                          joueur.total_points_tournoi,
-                                          reverse=True)
-        print("=====DETAIL RESULATS JOUEURS=====")
-        for joueur in liste_joueurs_par_points:
-            print(f"----Joueur: {joueur.nom_famille} {joueur.prenom}----,\n"
-                  f"Classement: {joueur.classement},\n"
-                  f"Total points tournoi: {joueur.total_points_tournoi}\n")
+from modeles import modele_tournoi, modele_joueur, modele_match
 
 
 class MenuPrincipal:
@@ -117,6 +44,9 @@ class MenuPrincipal:
               "")
 
     def menu_fin_modif_classement(self):
+        """
+        Menu après modification du classement d'un joueur
+        """
         print("-------------------------------------------------\n"
               "-- Choisir une option: --------------------------\n"
               "1) Modifier un autre joueur ---------------------\n"
@@ -127,6 +57,10 @@ class MenuPrincipal:
 
 
 class AfficheJoueurRapport:
+    """
+    Classe pour l'affichage des joueurs enregistrés
+    """
+
     def __call__(self):
         print("-------------------------------------------------\n"
               "------------------INFOS JOUEURS------------------\n"
@@ -139,6 +73,9 @@ class AfficheJoueurRapport:
               )
 
     def par_alphabetique(self, liste_joueurs):
+        """
+        Affichage des joueurs enregistrés par ordre alphabétique
+        """
         for joueur in liste_joueurs:
             print(
                 f"Nom --- Prénom --- Date de naissance\n"
@@ -149,6 +86,9 @@ class AfficheJoueurRapport:
         input()
 
     def par_classement(self, liste_joueurs):
+        """
+        Affichage des joueurs enregistrés par classement
+        """
         for joueur in liste_joueurs:
             print(f"Classement :{joueur.classement} - {joueur.nom_famille}"
                   f" {joueur.prenom} - {joueur.date_naissance} - "
@@ -159,7 +99,7 @@ class AfficheJoueurRapport:
 
 class AfficheTournoi:
     """
-    Affiche les tournois existants non commencés dans la DB
+    Affiche les tournois existants non commencés de la DB
     :return True si un tournoi existe et n'est pas commencé
     """
 
@@ -175,12 +115,28 @@ class AfficheTournoi:
 
 
 class AfficheTour:
+    """
+    Affiche les informations pendant les tours
+    """
+    def __init__(self):
+        self.match = modele_match.Match()
+
     def affiche_tour(self, tour_name, liste_matchs):
+        """
+        Affiche le nom du tour et la liste des matchs du tour
+        :type tour_name: object Tour
+        :param liste_matchs: liste d'objets Match
+        :type liste_matchs: list
+        """
         print(f"-------------{tour_name}---------------\n")
         for match in liste_matchs:
             print(match)
 
     def affiche_date_heure_tour(self):
+        """
+        Affiche le signal pour débuter et terminer un tour.
+        Enregistre l'heure de début et de fin du tour.
+        """
         print("Appuyez sur Y pour commencer le tour")
         while True:
             entree = input('==> ')
@@ -206,13 +162,15 @@ class AfficheTour:
 
 
 class ResultatsTournoi:
-    def __call__(self, tournoi_obj):
+    """
+    Affiche les résultats du tournoi et le classement des joueurs par points.
+    """
+    def __call__(self, tournoi_obj, liste_joueurs_tournoi):
         print("-------------------------------------------------\n"
               "-------------- RESULTATS TOURNOI ----------------\n"
               "-------------------------------------------------\n")
-        for tour in tournoi_obj.tournees:
+        for tour in tournoi_obj.liste_tours:
             print(tour)
-            print()
 
             for match in tour.liste_matchs_termines:
                 joueur_1 = modele_joueur.JOUEUR_DB.get(doc_id=match[0][0])
@@ -221,13 +179,20 @@ class ResultatsTournoi:
                 score_joueur_2 = match[1][1]
                 print(f"{joueur_1['Nom']} {joueur_1['Prenom']} VS "
                       f"{joueur_2['Nom']} {joueur_2['Prenom']}\n"
-                      f"RESULTAT: {score_joueur_1} -_-_- {score_joueur_2}")
+                      f"RESULTAT: {score_joueur_1} VS {score_joueur_2}\n")
 
-        print("Appuyez sur X pour revenir au menu\n")
+        liste_joueurs_tournoi.sort(
+            key=attrgetter("total_points_tournoi"), reverse=True)
+        for joueur in liste_joueurs_tournoi:
+            print("Classement des joueurs par points: ")
+            print(
+                f"{joueur.nom_famille} - Score: {joueur.total_points_tournoi}")
+
+        print("Appuyez sur X pour revenir au menu...")
         choix_valide = False
         while not choix_valide:
             choix = input("==> ")
             if choix.upper() == 'X':
                 choix_valide = True
             else:
-                print("Entrée invalide (Y/N)")
+                print("Entrée invalide, X pour revenir")

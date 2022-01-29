@@ -8,13 +8,13 @@ class Tournoi:
     Modèle de tournoi d'échecs
     """
 
-    def __init__(self, nom=None, lieu=None, date=None, controle_temps=None,
+    def __init__(self, nom_tournoi=None, lieu=None, date=None, controle_temps=None,
                  description=None, nombre_tours=None, nombre_joueurs=None,
-                 liste_joueurs=None, tournees=None, id_tournoi=None):
+                 ids_joueurs=None, liste_tours=None, id_tournoi=None):
         """
         Initialise une instance de Tournoi.
-        :param nom: nom du tournoi
-        :type nom: str
+        :param nom_tournoi: nom du tournoi
+        :type nom_tournoi: str
         :param lieu: lieu du tournoi
         :type lieu: str
         :param date: date du tournoi, plusieurs jours possible
@@ -29,20 +29,26 @@ class Tournoi:
         :type nombre_joueurs: int
         :param liste_joueurs: liste des objets joueurs participants
         :type liste_joueurs: list [Joueur]
+        :param ids_joueurs: liste des ID de joueur du tournoi
+        :type ids_joueurs: list
+        :param liste_tours: liste des object Tour
+        :type liste_tours: list
+        :param id_tournoi: ID du tournoi
+        :type id_tournoi: int
         """
-        if liste_joueurs is None:
-            liste_joueurs = []
-        if tournees is None:
-            tournees = []
-        self.nom = nom
+        if ids_joueurs is None:
+            ids_joueurs = []
+        if liste_tours is None:
+            liste_tours = []
+        self.nom = nom_tournoi
         self.lieu = lieu
         self.date = date
         self.controle_temps = controle_temps
         self.description = description
         self.nombre_tours = nombre_tours
         self.nombre_joueurs = nombre_joueurs
-        self.ids_joueurs = liste_joueurs
-        self.tournees = tournees
+        self.ids_joueurs = ids_joueurs
+        self.liste_tours = liste_tours
         self.id_tournoi = id_tournoi
 
     def __str__(self):
@@ -88,10 +94,15 @@ class Tournoi:
                              'Description': self.description,
                              'Nombre de joueurs': self.nombre_joueurs,
                              'Liste joueurs': self.ids_joueurs,
-                             'Tours': self.tournees}
+                             'Tours': self.liste_tours}
         return tournoi_serialise
 
     def ajout_db(self, infos_tournoi):
+        """
+        Méthode d'ajout d'un tournoi à la DB tournoi
+        :param infos_tournoi: liste des informations du tournoi
+        :type infos_tournoi: list
+        """
         tournoi = Tournoi(infos_tournoi[0], infos_tournoi[1],
                           infos_tournoi[2], infos_tournoi[3],
                           infos_tournoi[4], infos_tournoi[5],
