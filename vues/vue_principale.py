@@ -122,7 +122,7 @@ class AfficheChargementTournoi:
     :return True si un tournoi existe et n'est pas terminé
     """
 
-    def __call__(self, *args, **kwargs):
+    def __call__(self):
         tournoi_non_termine = False
         tournoi_db = modele_tournoi.TOURNOI_DB
         for tournoi in tournoi_db:

@@ -1,4 +1,5 @@
 from tinydb import TinyDB
+
 from controleurs import menu_controleur
 from vues import vue_principale
 
@@ -11,8 +12,8 @@ class Joueur:
     """
 
     def __init__(self, nom_famille=None, prenom=None, classement=None,
-                 date_naissance=None, sexe=None,
-                 total_points_tournoi=0, id_joueur=0):
+                 date_naissance=None, sexe=None, total_points_tournoi=0,
+                 id_joueur=0):
         """
         Initialise une instance de Joueur.
         :param nom_famille: nom du joueur

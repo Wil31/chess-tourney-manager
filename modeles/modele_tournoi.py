@@ -8,9 +8,10 @@ class Tournoi:
     Modèle de tournoi d'échecs
     """
 
-    def __init__(self, nom_tournoi=None, lieu=None, date=None, controle_temps=None,
-                 description=None, nombre_tours=None, nombre_joueurs=None,
-                 ids_joueurs=None, liste_tours=None, id_tournoi=None):
+    def __init__(self, nom_tournoi=None, lieu=None, date=None,
+                 controle_temps=None, description=None, nombre_tours=None,
+                 nombre_joueurs=None, ids_scores_joueurs=None,
+                 liste_tours=None, id_tournoi=None):
         """
         Initialise une instance de Tournoi.
         :param nom_tournoi: nom du tournoi
@@ -27,17 +28,16 @@ class Tournoi:
         :type nombre_tours: int
         :param nombre_joueurs: nombre de joueurs participants
         :type nombre_joueurs: int
-        :param liste_joueurs: liste des objets joueurs participants
-        :type liste_joueurs: list [Joueur]
-        :param ids_joueurs: liste des ID de joueur du tournoi
-        :type ids_joueurs: list
+        :param ids_scores_joueurs: dictionnaire des ID et scores des joueurs
+        du tournoi
+        :type ids_scores_joueurs: dict
         :param liste_tours: liste des object Tour
         :type liste_tours: list
         :param id_tournoi: ID du tournoi
         :type id_tournoi: int
         """
-        if ids_joueurs is None:
-            ids_joueurs = []
+        if ids_scores_joueurs is None:
+            ids_scores_joueurs = []
         if liste_tours is None:
             liste_tours = []
         self.nom = nom_tournoi
@@ -47,7 +47,7 @@ class Tournoi:
         self.description = description
         self.nombre_tours = nombre_tours
         self.nombre_joueurs = nombre_joueurs
-        self.ids_joueurs = ids_joueurs
+        self.ids_scores_joueurs = ids_scores_joueurs
         self.liste_tours = liste_tours
         self.id_tournoi = id_tournoi
 
@@ -59,7 +59,7 @@ class Tournoi:
                f"Contrôle du temps: {self.controle_temps},\n" \
                f"Description: {self.description},\n" \
                f"Nombre de tours: {self.nombre_tours},\n" \
-               f"Nombre de joueurs: {len(self.ids_joueurs)},\n"
+               f"Nombre de joueurs: {len(self.ids_scores_joueurs)},\n"
 
     def __repr__(self):
         return str(self)
@@ -93,7 +93,7 @@ class Tournoi:
                              'Controle du temps': self.controle_temps,
                              'Description': self.description,
                              'Nombre de joueurs': self.nombre_joueurs,
-                             'Liste joueurs': self.ids_joueurs,
+                             'Liste joueurs': self.ids_scores_joueurs,
                              'Tours': self.liste_tours}
         return tournoi_serialise
 
@@ -109,28 +109,3 @@ class Tournoi:
                           infos_tournoi[6], infos_tournoi[7])
         id_tournoi = TOURNOI_DB.insert(tournoi.serialise())
         TOURNOI_DB.update({"ID Tournoi": id_tournoi}, doc_ids=[id_tournoi])
-
-    def vainqueur_tournoi(self):
-        """
-        Retourne le vainqueur du tournoi, plusieurs si égalité des points.
-        Si plusieurs: ils sont classés du moins bon ELO au meilleur.
-        """
-        liste_joueurs = self.ids_joueurs
-        liste_joueurs_tri = sorted(liste_joueurs,
-                                   key=lambda joueur: joueur.classement)
-        liste_joueurs_par_points = sorted(liste_joueurs_tri,
-                                          key=lambda
-                                              joueur:
-                                          joueur.total_points_tournoi,
-                                          reverse=True)
-        points = liste_joueurs_par_points[0].total_points_tournoi
-        liste_vainqueurs = [v for v in liste_joueurs_par_points if
-                            v.total_points_tournoi == points]
-        if len(liste_vainqueurs) == 1:
-            vainqueur = f"{liste_vainqueurs[0].nom_famille} " \
-                        f"{liste_vainqueurs[0].prenom}"
-        else:
-            vainqueur = "Égalité: "
-            for joueur in liste_vainqueurs:
-                vainqueur += f"{joueur.nom_famille} {joueur.prenom}, "
-        return vainqueur

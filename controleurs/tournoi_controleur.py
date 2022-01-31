@@ -1,9 +1,10 @@
+from collections import deque
+from operator import attrgetter
+
 from controleurs import menu_controleur
 from modeles import modele_joueur, modele_tournoi, modele_tour
 from tests import tests
 from vues import vue_principale
-from operator import attrgetter
-from collections import deque
 
 
 class LancerTournoiControleur:
@@ -23,28 +24,25 @@ class LancerTournoiControleur:
             menu_controleur.MenuPrincipalControleur()
         self.vue_resultats = vue_principale.ResultatsTournoi()
         self.joueur = modele_joueur.Joueur()
-        self.liste_joueurs_tournoi = []
 
     def __call__(self):
         self.tournoi_obj = self.selection_tournoi()
         self.liste_joueurs_trie = self.triage_initial(self.tournoi_obj)
-        self.liste_joueurs_tournoi = self.liste_joueurs_trie.copy()
 
         self.tournoi_obj.liste_tours.append(
-            self.tour.lancer_tour(self.liste_joueurs_trie, self.tournoi_obj))
+            self.tour.lancer_tour(self.liste_joueurs_trie.copy(),
+                                  self.tournoi_obj))
         self.sauvegarde_tournoi(self.tournoi_obj)
 
         for tour in range(int(self.tournoi_obj.nombre_tours) - 1):
-            for joueur in self.liste_joueurs_tournoi:
-                print(
-                    f"{joueur.nom_famille} --score: {joueur.total_points_tournoi}")
-            self.liste_joueurs_trie_autre = self.triage_tours_suivants()
+            self.liste_joueurs_trie_suivant = self.triage_tours_suivants(
+                self.liste_joueurs_trie.copy())
             self.tournoi_obj.liste_tours.append(
-                self.tour.lancer_tour(self.liste_joueurs_trie_autre,
+                self.tour.lancer_tour(self.liste_joueurs_trie_suivant,
                                       self.tournoi_obj))
             self.sauvegarde_tournoi(self.tournoi_obj)
 
-        self.vue_resultats(self.tournoi_obj, self.liste_joueurs_tournoi)
+        self.vue_resultats(self.tournoi_obj, self.liste_joueurs_trie)
         self.menu_principal_controleur()
 
     def sauvegarde_tournoi(self, tournoi_obj):
@@ -53,6 +51,22 @@ class LancerTournoiControleur:
         :type tournoi_obj: object Tournoi
         """
         tournoi_db = modele_tournoi.TOURNOI_DB
+        tournoi_choisi = modele_tournoi.TOURNOI_DB.get(
+            doc_id=tournoi_obj.id_tournoi)
+        dict_ids_scores_joueurs = tournoi_choisi["Liste joueurs"]
+
+        for match in self.tour.liste_tours:
+            id_joueur_1 = str(match.joueur_1.id_joueur)
+            score_joueur_1 = match.joueur_1.total_points_tournoi
+            dict_ids_scores_joueurs[id_joueur_1] = score_joueur_1
+
+            id_joueur_2 = str(match.joueur_2.id_joueur)
+            score_joueur_2 = match.joueur_2.total_points_tournoi
+            dict_ids_scores_joueurs[id_joueur_2] = score_joueur_2
+
+        tournoi_db.update({"Liste joueurs": dict_ids_scores_joueurs},
+                          doc_ids=[tournoi_obj.id_tournoi])
+
         table_tours = tournoi_db.table('tours')
 
         tour_obj = tournoi_obj.liste_tours[-1]
@@ -80,10 +94,10 @@ class LancerTournoiControleur:
     def chargement_tournoi(self):
         self.affiche_tournoi = vue_principale.AfficheChargementTournoi()
         self.tournoi = modele_tournoi.Tournoi()
+        self.modele_joueur = modele_joueur.Joueur()
         tournoi_db = modele_tournoi.TOURNOI_DB
         table_tours = tournoi_db.table('tours')
         instances_tours = []
-        joueurs_tries = []
 
         if self.affiche_tournoi():
 
@@ -105,6 +119,15 @@ class LancerTournoiControleur:
                 instances_tours.append(tour_obj)
             tournoi_choisi["Tours"] = instances_tours
             tournoi_obj = self.tournoi.creer_instance_tournoi(tournoi_choisi)
+            dict_ids_scores_joueurs = tournoi_choisi["Liste joueurs"]
+
+            liste_obj_joueurs = []
+            for id_joueur in tournoi_obj.ids_scores_joueurs:
+                joueur = modele_joueur.JOUEUR_DB.get(doc_id=int(id_joueur))
+                joueur_obj = self.modele_joueur.creer_instance_joueur(joueur)
+                joueur_obj.total_points_tournoi = dict_ids_scores_joueurs[
+                    id_joueur]
+                liste_obj_joueurs.append(joueur_obj)
 
         else:
             print("Pas de tournoi non terminé.")
@@ -113,16 +136,12 @@ class LancerTournoiControleur:
         for tour in range(
                 int(tournoi_obj.nombre_tours) - len(tournoi_obj.liste_tours)):
             print(tournoi_obj)
-            for joueur in self.liste_joueurs_tournoi:
-                print(
-                    f"{joueur.nom_famille} --score: {joueur.total_points_tournoi}")
-            joueurs_tries.clear()
-            joueurs_tries = self.triage_tours_suivants()
+            joueurs_tries = self.triage_tours_suivants(liste_obj_joueurs.copy())
             tournoi_obj.liste_tours.append(
                 self.tour.lancer_tour(joueurs_tries, tournoi_obj))
             self.sauvegarde_tournoi(tournoi_obj)
 
-        self.vue_resultats(tournoi_obj, self.liste_joueurs_tournoi)
+        self.vue_resultats(tournoi_obj, liste_obj_joueurs)
         self.menu_principal_controleur()
 
     def selection_tournoi(self):
@@ -158,12 +177,12 @@ class LancerTournoiControleur:
         :return: liste d'objets Joueur
         :rtype: list
         """
-        ids_joueurs = tournoi.ids_joueurs
+        ids_joueurs = tournoi.ids_scores_joueurs
         instances_joueurs = []
         liste_joueurs_tri = []
 
         for id_joueur in ids_joueurs:
-            joueur = modele_joueur.JOUEUR_DB.get(doc_id=id_joueur)
+            joueur = modele_joueur.JOUEUR_DB.get(doc_id=int(id_joueur))
             joueur_obj = self.joueur.creer_instance_joueur(joueur)
             instances_joueurs.append(joueur_obj)
 
@@ -174,6 +193,8 @@ class LancerTournoiControleur:
             if index_joueur_1 + len(ids_joueurs) / 2 < len(ids_joueurs):
                 index_joueur_2 = index_joueur_1 + int(len(ids_joueurs) / 2)
                 joueur_2 = instances_joueurs[index_joueur_2]
+
+                print(f"Ajout du match {joueur_1} VS {joueur_2}\n")
                 liste_joueurs_tri.append(joueur_1)
                 liste_joueurs_tri.append(joueur_2)
                 self.MATCHS_JOUES.append(
@@ -183,16 +204,17 @@ class LancerTournoiControleur:
 
         return liste_joueurs_tri
 
-    def triage_tours_suivants(self):
+    def triage_tours_suivants(self, instances_joueurs_a_trier):
         """
         Méthode pour générer les paires (matchs) des tours suivants
+        :param instances_joueurs_a_trier: liste d'objets Joueur
+        :type instances_joueurs_a_trier: list
         :return: liste d'objets Joueur
         :rtype: list
         """
         test_match = set()
         liste_joueurs_par_score = []
 
-        instances_joueurs_a_trier = self.liste_joueurs_tournoi.copy()
         instances_joueurs_a_trier.sort(
             key=attrgetter("total_points_tournoi", 'classement'), reverse=True)
 
@@ -216,7 +238,7 @@ class LancerTournoiControleur:
                     else:
                         continue
 
-            print(f"Ajout du match {joueur_1} VS {joueur_2}")
+            print(f"Ajout du match {joueur_1} VS {joueur_2}\n")
             liste_joueurs_par_score.append(joueur_1)
             liste_joueurs_par_score.append(joueur_2)
             instances_joueurs_a_trier.pop(
@@ -261,7 +283,9 @@ class CreerTournoiControleur:
             if entree in ('N', 'n'):
                 entree_valide = True
                 self.ajout_joueurs()
-                self.infos_tournoi.append(self.liste_id_joueurs)
+                dict_id_score_joueurs = dict.fromkeys(self.liste_id_joueurs, 0)
+
+                self.infos_tournoi.append(dict_id_score_joueurs)
         self.tournoi.ajout_db(self.infos_tournoi)
         print("==========================================================\n"
               "==================Nouveau tournoi créé !==================\n"

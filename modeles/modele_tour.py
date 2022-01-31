@@ -55,7 +55,7 @@ class Tour:
                           'Liste matchs termines': self.liste_matchs_termines}
         return tour_serialise
 
-    def lancer_tour(self, liste_joueurs_trie_autre, tournoi_obj):
+    def lancer_tour(self, liste_joueurs_trie, tournoi_obj):
         """
         Méthode de contrôle du tour avec entrée des résultats de matchs
         """
@@ -63,7 +63,6 @@ class Tour:
         self.vue = vue_principale.AfficheTour()
         self.liste_tours = []
         self.liste_matchs_termines = []
-        liste_joueurs_trie = liste_joueurs_trie_autre.copy()
 
         while len(liste_joueurs_trie) > 0:
             match = modele_match.Match(self.nom_tour, liste_joueurs_trie[0],
