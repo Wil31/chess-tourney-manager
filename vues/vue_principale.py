@@ -17,11 +17,13 @@ class MenuPrincipal:
               "------- GESTIONNAIRE DE TOURNOI D'ÉCHECS --------\n"
               "-------------------------------------------------\n"
               "-- Choisir une option: --------------------------\n"
-              "1) Nouveau tournoi ------------------------------\n"
-              "2) Reprendre un tournoi -------------------------\n"
-              "3) Créer un joueur ------------------------------\n"
-              "4) Liste des joueurs ----------------------------\n"
-              "5) Modifier classement joueur -------------------\n"
+              "1) Créer nouveau tournoi ------------------------\n"
+              "2) Lancer un nouveau tournoi --------------------\n"
+              "3) Reprendre un tournoi en cours ----------------\n"
+              "-------------------------------------------------\n"
+              "4) Créer un joueur ------------------------------\n"
+              "5) Liste des joueurs ----------------------------\n"
+              "6) Modifier classement joueur -------------------\n"
               "-------------------------------------------------\n"
               "x) Quitter --------------------------------------\n"
               "-------------------------------------------------\n"
@@ -114,10 +116,29 @@ class AfficheTournoi:
         return tournoi_non_commence
 
 
+class AfficheChargementTournoi:
+    """
+    Affiche les tournois non terminés de la DB
+    :return True si un tournoi existe et n'est pas terminé
+    """
+
+    def __call__(self, *args, **kwargs):
+        tournoi_non_termine = False
+        tournoi_db = modele_tournoi.TOURNOI_DB
+        for tournoi in tournoi_db:
+            if tournoi["Tours"]:
+                if len(tournoi["Tours"]) < int(tournoi["Nombre de tours"]):
+                    print(f"ID Tournoi: {tournoi.doc_id}, Nom: "
+                          f"{tournoi['Nom du tournoi']}, Lieu: {tournoi['Lieu']}")
+                    tournoi_non_termine = True
+        return tournoi_non_termine
+
+
 class AfficheTour:
     """
     Affiche les informations pendant les tours
     """
+
     def __init__(self):
         self.match = modele_match.Match()
 
@@ -165,6 +186,7 @@ class ResultatsTournoi:
     """
     Affiche les résultats du tournoi et le classement des joueurs par points.
     """
+
     def __call__(self, tournoi_obj, liste_joueurs_tournoi):
         print("-------------------------------------------------\n"
               "-------------- RESULTATS TOURNOI ----------------\n"
@@ -183,10 +205,11 @@ class ResultatsTournoi:
 
         liste_joueurs_tournoi.sort(
             key=attrgetter("total_points_tournoi"), reverse=True)
+        print("Classement des joueurs par points: ")
         for joueur in liste_joueurs_tournoi:
-            print("Classement des joueurs par points: ")
             print(
-                f"{joueur.nom_famille} - Score: {joueur.total_points_tournoi}")
+                f"{joueur.nom_famille} {joueur.prenom} - Score: "
+                f"{joueur.total_points_tournoi}")
 
         print("Appuyez sur X pour revenir au menu...")
         choix_valide = False

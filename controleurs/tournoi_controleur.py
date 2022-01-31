@@ -77,6 +77,54 @@ class LancerTournoiControleur:
             else:
                 print("Entrée invalide (Y/N)")
 
+    def chargement_tournoi(self):
+        self.affiche_tournoi = vue_principale.AfficheChargementTournoi()
+        self.tournoi = modele_tournoi.Tournoi()
+        tournoi_db = modele_tournoi.TOURNOI_DB
+        table_tours = tournoi_db.table('tours')
+        instances_tours = []
+        joueurs_tries = []
+
+        if self.affiche_tournoi():
+
+            choix = None
+            id_valide = False
+            while not id_valide:
+                choix = input("Choisir ID du tournoi ==> ")
+                if choix.isdigit() and int(
+                        choix) > 0 and int(choix) <= len(
+                    modele_tournoi.TOURNOI_DB):
+                    id_valide = True
+                else:
+                    print("Entrez un ID de tournoi valide !")
+
+            tournoi_choisi = modele_tournoi.TOURNOI_DB.get(doc_id=int(choix))
+            for tour in tournoi_choisi["Tours"]:
+                tour_serialise = table_tours.get(doc_id=tour)
+                tour_obj = self.tour.creer_instance_tour(tour_serialise)
+                instances_tours.append(tour_obj)
+            tournoi_choisi["Tours"] = instances_tours
+            tournoi_obj = self.tournoi.creer_instance_tournoi(tournoi_choisi)
+
+        else:
+            print("Pas de tournoi non terminé.")
+            self.menu_principal_controleur()
+
+        for tour in range(
+                int(tournoi_obj.nombre_tours) - len(tournoi_obj.liste_tours)):
+            print(tournoi_obj)
+            for joueur in self.liste_joueurs_tournoi:
+                print(
+                    f"{joueur.nom_famille} --score: {joueur.total_points_tournoi}")
+            joueurs_tries.clear()
+            joueurs_tries = self.triage_tours_suivants()
+            tournoi_obj.liste_tours.append(
+                self.tour.lancer_tour(joueurs_tries, tournoi_obj))
+            self.sauvegarde_tournoi(tournoi_obj)
+
+        self.vue_resultats(tournoi_obj, self.liste_joueurs_tournoi)
+        self.menu_principal_controleur()
+
     def selection_tournoi(self):
         """
         Méthode pour sélectionner un tournoi non démarré.
@@ -116,8 +164,8 @@ class LancerTournoiControleur:
 
         for id_joueur in ids_joueurs:
             joueur = modele_joueur.JOUEUR_DB.get(doc_id=id_joueur)
-            joueur = self.joueur.creer_instance_joueur(joueur)
-            instances_joueurs.append(joueur)
+            joueur_obj = self.joueur.creer_instance_joueur(joueur)
+            instances_joueurs.append(joueur_obj)
 
         for joueur in instances_joueurs:
             joueur_1 = joueur

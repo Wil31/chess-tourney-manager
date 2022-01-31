@@ -19,6 +19,8 @@ def choix_menu():
                 return '4'
             case '5':
                 return '5'
+            case '6':
+                return '6'
             case ('X' | 'x'):
                 return 'x'
             case '9':
@@ -47,14 +49,16 @@ class MenuPrincipalControleur:
         if entree == '2':
             self.controleur_actuel = tournoi_controleur.LancerTournoiControleur()
             self.aller_vers_lancer_tournoi()
-            pass
         if entree == '3':
+            self.controleur_actuel = tournoi_controleur.LancerTournoiControleur()
+            self.aller_vers_reprendre_tournoi()
+        if entree == '4':
             self.controleur_actuel = joueur_controleur.CreerJoueurControleur()
             self.aller_vers_creer_joueur()
-        if entree == '4':
+        if entree == '5':
             self.controleur_actuel = joueur_controleur.JoueurRapport()
             self.aller_vers_rapport_joueur()
-        if entree == '5':
+        if entree == '6':
             self.controleur_actuel = self.modele_joueur.modifier_classement_joueur()
             self.aller_vers_modifier_classement_joueur()
         if entree == 'x':
@@ -69,6 +73,9 @@ class MenuPrincipalControleur:
 
     def aller_vers_lancer_tournoi(self):
         return self.controleur_actuel()
+
+    def aller_vers_reprendre_tournoi(self):
+        return self.controleur_actuel.chargement_tournoi()
 
     def aller_vers_creer_joueur(self):
         return self.controleur_actuel()
