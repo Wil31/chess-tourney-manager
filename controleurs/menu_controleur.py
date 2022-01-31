@@ -23,8 +23,6 @@ def choix_menu():
                 return '6'
             case ('X' | 'x'):
                 return 'x'
-            case '9':
-                return '9'
             case _:
                 print("Entrée non valide")
 
@@ -64,9 +62,6 @@ class MenuPrincipalControleur:
         if entree == 'x':
             self.controleur_actuel = FermerApplication()
             self.aller_vers_fermer_application()
-        if entree == '9':
-            self.controleur_actuel = tournoi_controleur.TournoiTest()
-            self.aller_vers_tournoi_test()
 
     def aller_vers_creer_tournoi(self):
         return self.controleur_actuel()
@@ -87,9 +82,6 @@ class MenuPrincipalControleur:
         return self.controleur_actuel()
 
     def aller_vers_fermer_application(self):
-        return self.controleur_actuel()
-
-    def aller_vers_tournoi_test(self):
         return self.controleur_actuel()
 
 

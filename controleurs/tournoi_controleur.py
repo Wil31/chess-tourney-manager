@@ -3,7 +3,6 @@ from operator import attrgetter
 
 from controleurs import menu_controleur
 from modeles import modele_joueur, modele_tournoi, modele_tour
-from tests import tests
 from vues import vue_principale
 
 
@@ -136,7 +135,8 @@ class LancerTournoiControleur:
         for tour in range(
                 int(tournoi_obj.nombre_tours) - len(tournoi_obj.liste_tours)):
             print(tournoi_obj)
-            joueurs_tries = self.triage_tours_suivants(liste_obj_joueurs.copy())
+            joueurs_tries = self.triage_tours_suivants(
+                liste_obj_joueurs.copy())
             tournoi_obj.liste_tours.append(
                 self.tour.lancer_tour(joueurs_tries, tournoi_obj))
             self.sauvegarde_tournoi(tournoi_obj)
@@ -274,18 +274,10 @@ class CreerTournoiControleur:
         self.infos_tournoi.append(self.ajout_description())
         self.infos_tournoi.append(self.ajout_nombre_tours())
         self.infos_tournoi.append(self.ajout_nombre_joueurs())
-        entree_valide = False
-        while not entree_valide:
-            entree = input("Créer des joueurs aléatoires? (Y/N) ==> ")
-            if entree in ('Y', 'y'):
-                entree_valide = True
-                self.infos_tournoi.append(self.ajout_joueurs_aleatoires())
-            if entree in ('N', 'n'):
-                entree_valide = True
-                self.ajout_joueurs()
-                dict_id_score_joueurs = dict.fromkeys(self.liste_id_joueurs, 0)
+        self.ajout_joueurs()
+        dict_id_score_joueurs = dict.fromkeys(self.liste_id_joueurs, 0)
 
-                self.infos_tournoi.append(dict_id_score_joueurs)
+        self.infos_tournoi.append(dict_id_score_joueurs)
         self.tournoi.ajout_db(self.infos_tournoi)
         print("==========================================================\n"
               "==================Nouveau tournoi créé !==================\n"
@@ -406,15 +398,6 @@ class CreerTournoiControleur:
                 print("Entrez un nombre pair et positif!")
         return int(nombre_joueurs)
 
-    def ajout_joueurs_aleatoires(self):
-        """
-        Créé et retourne une liste de joueurs aléatoire.
-        """
-        nombre_joueurs = int(self.infos_tournoi[6])
-        liste_joueurs = tests.cree_joueurs_alea(nombre_joueurs)
-        print(f"{nombre_joueurs} joueurs aléatoires ont été créés")
-        return liste_joueurs
-
     def ajout_joueurs(self):
         """
         Choix des joueurs depuis la DB et les ajoute à self.liste_id_joueurs
@@ -451,20 +434,3 @@ class CreerTournoiControleur:
             self.liste_id_joueurs.append(id_choisi)
             print(f"Joueurs inscrits: {self.liste_id_joueurs}\n")
             self.ajout_joueurs()
-
-
-class TournoiTest:
-    def __init__(self):
-        self.menu_principal_controleur = \
-            menu_controleur.MenuPrincipalControleur()
-
-    def __call__(self):
-        # Créer le tournoi test
-        tournoi_rois = modele_tournoi.Tournoi("Tournoi des Rois", "Toulouse",
-                                              "16 janvier",
-                                              "Bullet",
-                                              "Le premier tournoi de 2022")
-
-        tournoi_test = tests.Tests(tournoi_rois)
-        tournoi_test.run()
-        self.menu_principal_controleur()
