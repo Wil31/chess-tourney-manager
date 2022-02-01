@@ -106,7 +106,7 @@ class LancerTournoiControleur:
                 choix = input("Choisir ID du tournoi ==> ")
                 if choix.isdigit() and int(
                         choix) > 0 and int(choix) <= len(
-                    modele_tournoi.TOURNOI_DB):
+                        modele_tournoi.TOURNOI_DB):
                     id_valide = True
                 else:
                     print("Entrez un ID de tournoi valide !")
@@ -159,7 +159,7 @@ class LancerTournoiControleur:
                 choix = input("Choisir ID du tournoi ==> ")
                 if choix.isdigit() and int(
                         choix) > 0 and int(choix) <= len(
-                    modele_tournoi.TOURNOI_DB):
+                        modele_tournoi.TOURNOI_DB):
                     id_valide = True
                 else:
                     print("Entrez un ID de tournoi valide !")
