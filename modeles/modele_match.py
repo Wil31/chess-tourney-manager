@@ -2,6 +2,7 @@ class Match:
     """
     Représente un match d'échecs
     """
+
     NUMERO_MATCH = 1
 
     def __init__(self, nom_match=None, joueur_1=None, joueur_2=None):
@@ -19,9 +20,11 @@ class Match:
         self.joueur_2 = joueur_2
 
     def __str__(self):
-        return f"Match à jouer: {self.joueur_1.nom_famille}" \
-               f" {self.joueur_1.prenom} " \
-               f"VS {self.joueur_2.nom_famille} {self.joueur_2.prenom}"
+        return (
+            f"Match à jouer: {self.joueur_1.nom_famille}"
+            f" {self.joueur_1.prenom} "
+            f"VS {self.joueur_2.nom_famille} {self.joueur_2.prenom}"
+        )
 
     def __repr__(self):
         return str(self)

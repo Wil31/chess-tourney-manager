@@ -7,8 +7,9 @@ class Tour:
     Représente un tour de tournoi
     """
 
-    def __init__(self, nom_tour=None, date_debut=None, date_fin=None,
-                 liste_matchs_termines=None):
+    def __init__(
+        self, nom_tour=None, date_debut=None, date_fin=None, liste_matchs_termines=None
+    ):
         """
         Initialise une instance de Tour.
         :param nom_tour: nom du tour
@@ -27,9 +28,11 @@ class Tour:
         self.liste_tours = []
 
     def __str__(self):
-        return f"----Tour: {self.nom_tour}----,\n" \
-               f"Date de début: {self.date_debut},\n" \
-               f"Date de fin: {self.date_fin}\n"
+        return (
+            f"----Tour: {self.nom_tour}----,\n"
+            f"Date de début: {self.date_debut},\n"
+            f"Date de fin: {self.date_fin}\n"
+        )
 
     def __repr__(self):
         return str(self)
@@ -39,20 +42,22 @@ class Tour:
         Méthode d'instanciation de tour à partir de données texte
         :type tour_sauve: dict
         """
-        nom = tour_sauve['Nom']
-        date_debut = tour_sauve['Debut']
-        date_fin = tour_sauve['Fin']
-        liste_matchs_termines = tour_sauve['Liste matchs termines']
+        nom = tour_sauve["Nom"]
+        date_debut = tour_sauve["Debut"]
+        date_fin = tour_sauve["Fin"]
+        liste_matchs_termines = tour_sauve["Liste matchs termines"]
         return Tour(nom, date_debut, date_fin, liste_matchs_termines)
 
     def serialise(self):
         """
         Méthode de sérialisation du modèle tour
         """
-        tour_serialise = {'Nom': self.nom_tour,
-                          'Debut': self.date_debut,
-                          'Fin': self.date_fin,
-                          'Liste matchs termines': self.liste_matchs_termines}
+        tour_serialise = {
+            "Nom": self.nom_tour,
+            "Debut": self.date_debut,
+            "Fin": self.date_fin,
+            "Liste matchs termines": self.liste_matchs_termines,
+        }
         return tour_serialise
 
     def lancer_tour(self, liste_joueurs_trie, tournoi_obj):
@@ -65,8 +70,9 @@ class Tour:
         self.liste_matchs_termines = []
 
         while len(liste_joueurs_trie) > 0:
-            match = modele_match.Match(self.nom_tour, liste_joueurs_trie[0],
-                                       liste_joueurs_trie[1])
+            match = modele_match.Match(
+                self.nom_tour, liste_joueurs_trie[0], liste_joueurs_trie[1]
+            )
             modele_match.Match.NUMERO_MATCH += 1
             self.liste_tours.append(match)
             del liste_joueurs_trie[0:2]
@@ -82,18 +88,19 @@ class Tour:
                     f"Entrez le résultat de {match.joueur_1.nom_famille}"
                     f" {match.joueur_1.prenom}\n"
                     f"1: Victoire | 0: Défaire | N: Match nul "
-                    f"==> ")
+                    f"==> "
+                )
                 resultat_joueur_2 = None
-                if resultat_joueur_1 in ('0', '1', 'n', 'N'):
+                if resultat_joueur_1 in ("0", "1", "n", "N"):
                     resultat_valide = True
                     match resultat_joueur_1:
-                        case '0':
+                        case "0":
                             resultat_joueur_1 = 0
                             resultat_joueur_2 = 1
-                        case '1':
+                        case "1":
                             resultat_joueur_1 = 1
                             resultat_joueur_2 = 0
-                        case ('n' | 'N'):
+                        case ("n" | "N"):
                             resultat_joueur_2 = resultat_joueur_1 = 0.5
                     match.resultat_joueur_1 = resultat_joueur_1
                     match.joueur_1.total_points_tournoi += resultat_joueur_1
@@ -102,8 +109,12 @@ class Tour:
                 else:
                     continue
             self.liste_matchs_termines.append(
-                ([match.joueur_1.id_joueur, match.resultat_joueur_1],
-                 [match.joueur_2.id_joueur, match.resultat_joueur_2]))
+                (
+                    [match.joueur_1.id_joueur, match.resultat_joueur_1],
+                    [match.joueur_2.id_joueur, match.resultat_joueur_2],
+                )
+            )
 
-        return Tour(self.nom_tour, self.date_debut, self.date_fin,
-                    self.liste_matchs_termines)
+        return Tour(
+            self.nom_tour, self.date_debut, self.date_fin, self.liste_matchs_termines
+        )

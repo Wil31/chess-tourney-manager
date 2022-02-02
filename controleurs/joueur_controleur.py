@@ -11,8 +11,7 @@ class CreerJoueurControleur:
 
     def __init__(self):
         self.infos_joueur = []
-        self.menu_principal_controleur = \
-            menu_controleur.MenuPrincipalControleur()
+        self.menu_principal_controleur = menu_controleur.MenuPrincipalControleur()
 
     def __call__(self):
         self.modele_joueur = modele_joueur.Joueur()
@@ -30,7 +29,7 @@ class CreerJoueurControleur:
         nom_valide = False
         while not nom_valide:
             nom_joueur = input("Entrez le NOM du joueur: ")
-            if nom_joueur != '' and nom_joueur.isalpha():
+            if nom_joueur != "" and nom_joueur.isalpha():
                 nom_valide = True
             else:
                 print("Un nom est obligatoire!")
@@ -41,7 +40,7 @@ class CreerJoueurControleur:
         prenom_valide = False
         while not prenom_valide:
             prenom_joueur = input("Entrez le PRENOM du joueur: ")
-            if prenom_joueur != '' and prenom_joueur.isalpha():
+            if prenom_joueur != "" and prenom_joueur.isalpha():
                 prenom_valide = True
             else:
                 print("Un prénom est obligatoire!")
@@ -82,11 +81,11 @@ class CreerJoueurControleur:
     def ajout_sexe(self):
         while True:
             choix = input("Entrez les sexe: F ou M: ")
-            if choix in ('M', 'm'):
-                sexe = 'M'
+            if choix.upper() == "M":
+                sexe = "M"
                 break
-            if choix in ('F', 'f'):
-                sexe = 'F'
+            if choix.upper() == "F":
+                sexe = "F"
                 break
             else:
                 print("Entrez un choix F ou M!")
@@ -109,8 +108,7 @@ class JoueurRapport:
 
     def __call__(self):
         liste_joueurs = []
-        self.menu_principal_controleur = \
-            menu_controleur.MenuPrincipalControleur()
+        self.menu_principal_controleur = menu_controleur.MenuPrincipalControleur()
         self.joueur_db = modele_joueur.JOUEUR_DB
         self.joueur = modele_joueur.Joueur()
         if len(self.joueur_db) == 0:
@@ -125,15 +123,15 @@ class JoueurRapport:
         while True:
             entree = input("==> ")
             match entree:
-                case '1':
-                    liste_joueurs.sort(key=attrgetter('nom_famille'))
+                case "1":
+                    liste_joueurs.sort(key=attrgetter("nom_famille"))
                     self.affiche_joueur.par_alphabetique(liste_joueurs)
                     JoueurRapport.__call__(self)
-                case '2':
-                    liste_joueurs.sort(key=attrgetter('classement'))
+                case "2":
+                    liste_joueurs.sort(key=attrgetter("classement"))
                     self.affiche_joueur.par_classement(liste_joueurs)
                     JoueurRapport.__call__(self)
-                case ('X' | 'x'):
+                case ("X" | "x"):
                     self.menu_principal_controleur()
                 case _:
                     print("Entrée non valide")
