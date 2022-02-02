@@ -29,6 +29,11 @@ Il permet de :
 
 ### 3 - Exécuter le code
 * Exécuter le programme avec la commande `py.exe .\main.py`
+* Créer d'abord des joueurs (menu 4)
+* Créer un nouveau tournoi (menu 1)
+* Lancer le nouveau tournoi (menu 2)
+* Si un tournoi est arrêté entre 2 tours, il est possible de le sélectionner 
+et le continuer (menu 3)
 
 ## Rapport flake8
 
