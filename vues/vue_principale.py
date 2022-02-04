@@ -83,6 +83,8 @@ class AfficheJoueurRapport:
     def par_alphabetique(self, liste_joueurs):
         """
         Affichage des joueurs enregistrés par ordre alphabétique
+        :param liste_joueurs: liste d'objets Joueur
+        :type liste_joueurs: list
         """
         for joueur in liste_joueurs:
             print(
@@ -97,6 +99,8 @@ class AfficheJoueurRapport:
     def par_classement(self, liste_joueurs):
         """
         Affichage des joueurs enregistrés par classement
+        :param liste_joueurs: liste d'objets Joueur
+        :type liste_joueurs: list
         """
         for joueur in liste_joueurs:
             print(
@@ -112,6 +116,7 @@ class AfficheTournoi:
     """
     Affiche les tournois existants non commencés de la DB
     :return True si un tournoi existe et n'est pas commencé
+    :rtype: bool
     """
 
     def __call__(self, *args, **kwargs):
@@ -131,6 +136,7 @@ class AfficheChargementTournoi:
     """
     Affiche les tournois non terminés de la DB
     :return True si un tournoi existe et n'est pas terminé
+    :rtype: bool
     """
 
     def __call__(self):
@@ -158,6 +164,7 @@ class AfficheTour:
     def affiche_tour(self, tour_name, liste_matchs):
         """
         Affiche le nom du tour et la liste des matchs du tour
+        :param tour_name: un Tour
         :type tour_name: object Tour
         :param liste_matchs: liste d'objets Match
         :type liste_matchs: list
@@ -201,6 +208,12 @@ class ResultatsTournoi:
     """
 
     def __call__(self, tournoi_obj, liste_joueurs_tournoi):
+        """
+        :param tournoi_obj: un Tournoi
+        :type tournoi_obj: object Tournoi
+        :param liste_joueurs_tournoi: liste d'objets Joueur
+        :type liste_joueurs_tournoi: list
+        """
         print(
             "-------------------------------------------------\n"
             "-------------- RESULTATS TOURNOI ----------------\n"

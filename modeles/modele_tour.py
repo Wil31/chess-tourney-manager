@@ -40,7 +40,10 @@ class Tour:
     def creer_instance_tour(self, tour_sauve):
         """
         Méthode d'instanciation de tour à partir de données texte
+        :param tour_sauve: dictionnaire contenant les informations d'un tour
         :type tour_sauve: dict
+        :return: un Tour
+        :rtype: object Tour
         """
         nom = tour_sauve["Nom"]
         date_debut = tour_sauve["Debut"]
@@ -51,6 +54,8 @@ class Tour:
     def serialise(self):
         """
         Méthode de sérialisation du modèle tour
+        :return dictionnaire contenant les informations d'un tour
+        :rtype: dict
         """
         tour_serialise = {
             "Nom": self.nom_tour,
@@ -63,6 +68,12 @@ class Tour:
     def lancer_tour(self, liste_joueurs_trie, tournoi_obj):
         """
         Méthode de contrôle du tour avec entrée des résultats de matchs
+        :param tournoi_obj: objet Tournoi
+        :type tournoi_obj: Tournoi
+        :param liste_joueurs_trie: liste d'objets joueur
+        :type liste_joueurs_trie: list
+        :return: un Tour
+        :rtype: object Tour
         """
         self.nom_tour = f"Tour {len(tournoi_obj.liste_tours) + 1}"
         self.vue = vue_principale.AfficheTour()

@@ -92,6 +92,9 @@ class LancerTournoiControleur:
                 print("Entrée invalide (Y/N)")
 
     def chargement_tournoi(self):
+        """
+        Méthode de chargement de tournoi depuis la DB tournoi
+        """
         self.affiche_tournoi = vue_principale.AfficheChargementTournoi()
         self.tournoi = modele_tournoi.Tournoi()
         self.modele_joueur = modele_joueur.Joueur()
@@ -177,6 +180,8 @@ class LancerTournoiControleur:
     def triage_initial(self, tournoi):
         """
         Méthode pour générer les paires (matchs) du premier tour
+        :param tournoi: un tournoi
+        :type tournoi: object Tournoi
         :return: liste d'objets Joueur
         :rtype: list
         """

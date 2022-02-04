@@ -78,7 +78,10 @@ class Tournoi:
     def creer_instance_tournoi(self, tournoi_sauve):
         """
         Méthode d'instanciation de tournoi à partir de données texte
+        :param tournoi_sauve: dictionnaire contenant les informations d'un tournoi
         :type tournoi_sauve: dict
+        :return: un Tournoi
+        :rtype: object Tournoi
         """
         nom = tournoi_sauve["Nom du tournoi"]
         lieu = tournoi_sauve["Lieu"]
@@ -106,6 +109,8 @@ class Tournoi:
     def serialise(self):
         """
         Méthode de sérialisation du modèle tournoi
+        :return: dictionnaire contenant les informations d'un tournoi
+        :rtype: dict
         """
         tournoi_serialise = {
             "Nom du tournoi": self.nom,

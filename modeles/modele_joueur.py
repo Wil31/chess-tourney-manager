@@ -55,7 +55,10 @@ class Joueur:
     def creer_instance_joueur(self, joueur_sauve):
         """
         Méthode d'instanciation de joueur à partir de données texte
+        :param joueur_sauve: dictionnaire contenant les informations d'un joueur
         :type joueur_sauve: dict
+        :return: un Joueur
+        :rtype: object Joueur
         """
         nom_famille = joueur_sauve["Nom"]
         prenom = joueur_sauve["Prenom"]
@@ -77,8 +80,8 @@ class Joueur:
     def serialise(self):
         """
         Méthode de sérialisation du modèle joueur
-        :return:
-        :rtype:
+        :return: dictionnaire contenant les informations d'un joueur
+        :rtype: dict
         """
         joueur_sauve = {
             "Nom": self.nom_famille,
